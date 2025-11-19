@@ -1520,66 +1520,51 @@
       }
     }
 
-    function updateOrbLevel() {
-      const completed = index;
-      let newLevel = 1;
-      if (completed >= 3) newLevel = 2;
-      if (completed >= 6) newLevel = 3;
-      if (completed >= 9) newLevel = 4;
-      if (completed >= 12) newLevel = 5;
-      if (completed >= 16) newLevel = 6;
-      if (completed >= 20) newLevel = 7;
+   function updateOrbVisual(initial = false, levelUp = false) {
+  // Remove any existing level classes + flash class
+  orbEl.classList.remove(
+    "level-1",
+    "level-2",
+    "level-3",
+    "level-4",
+    "level-5",
+    "level-6",
+    "level-7",
+    "level-up-flash"
+  );
 
-      if (newLevel !== orbLevel) {
-        orbLevel = newLevel;
-        updateOrbVisual(false, true); // trigger flash
-      } else {
-        updateOrbVisual();
-      }
-    }
+  // Apply the new level class (this keeps the orb expanded)
+  orbEl.classList.add(`level-${orbLevel}`);
 
-    function updateOrbVisual(initial = false, levelUp = false) {
-      orbEl.classList.remove(
-        "level-1",
-        "level-2",
-        "level-3",
-        "level-4",
-        "level-5",
-        "level-6",
-        "level-7",
-        "level-up-flash"
-      );
-      orbEl.classList.add(`level-${orbLevel}`);
+  const labels = {
+    1: "Level 1 • Spark",
+    2: "Level 2 • Pulse",
+    3: "Level 3 • Glow",
+    4: "Level 4 • Flame",
+    5: "Level 5 • Ascension",
+    6: "Level 6 • Visionary",
+    7: "Level 7 • Mastery"
+  };
 
-      const labels = {
-        1: "Level 1 • Spark",
-        2: "Level 2 • Pulse",
-        3: "Level 3 • Glow",
-        4: "Level 4 • Flame",
-        5: "Level 5 • Ascension",
-        6: "Level 6 • Visionary",
-        7: "Level 7 • Mastery"
-      };
+  const hints = {
+    1: "Every shift starts with one honest decision.",
+    2: "You’re building awareness. That’s the real leverage.",
+    3: "Your habits are starting to align with your vision.",
+    4: "You’re practicing control under pressure, not just in perfect moments.",
+    5: "Your default reactions are slowly becoming intentional responses.",
+    6: "You’re moving like someone who trusts their future self.",
+    7: "This isn’t perfection, it’s proof of growth. Keep compounding."
+  };
 
-      const hints = {
-        1: "Every shift starts with one honest decision.",
-        2: "You’re building awareness. That’s the real leverage.",
-        3: "Your habits are starting to align with your vision.",
-        4: "You’re practicing control under pressure, not just in perfect moments.",
-        5: "Your default reactions are slowly becoming intentional responses.",
-        6: "You’re moving like someone who trusts their future self.",
-        7: "This isn’t perfection, it’s proof of growth. Keep compounding."
-      };
+  orbLabelEl.textContent = labels[orbLevel];
+  orbHintEl.textContent = hints[orbLevel];
 
-      orbLabelEl.textContent = labels[orbLevel];
-      orbHintEl.textContent = hints[orbLevel];
-
-      if (levelUp && !initial) {
-        orbEl.classList.add("level-up-flash");
-        setTimeout(() => {
-          orbEl.classList.remove("level-up-flash");
-        }, 650);
-      }
+  // 🔥 If we leveled up, apply the flash class — but DO NOT remove it
+  if (levelUp && !initial) {
+    orbEl.classList.add("level-up-flash");
+    // ⛔️ Removed timeout that caused orb to shrink back
+  }
+}
     }
 
     function applyDeltas(deltas) {
