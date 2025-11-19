@@ -928,34 +928,38 @@
       </section>
     </div>
 
-   <!-- FOOTER -->
+  <!-- FOOTER -->
 <footer class="wp-footer" style="
     text-align:center;
-    padding:35px 20px;
+    padding:40px 20px;
     margin-top:50px;
     color:#9aa4b2;
     font-size:0.9rem;
 ">
 
     <!-- Tagline -->
-    <p style="color:#ffffff; font-weight:600; margin-bottom:10px;">
+    <p style="color:#ffffff; font-weight:600; margin-bottom:15px;">
         WealthPath — “A Journey Uniquely Yours”
     </p>
 
-    <!-- Copyright -->
-    <p style="margin-bottom:15px;">
-        © <span id="wpYear"></span> WealthPath. All rights reserved.
-    </p>
-
-    <!-- Contact Link -->
-    <p>
+    <!-- Contact -->
+    <p style="margin-bottom:20px;">
         <a href="mailto:info@mywealthpath.org" 
            style="color:#9aa4b2; text-decoration:none;">
            Contact Us
         </a>
     </p>
+
+    <!-- Copyright -->
+    <p style="margin-top:10px;">
+        © <span id="wpYear"></span> WealthPath. All rights reserved.
+    </p>
+
 </footer>
 
+<script>
+  document.getElementById("wpYear").textContent = new Date().getFullYear();
+</script>
 <script>
   document.getElementById("wpYear").textContent = new Date().getFullYear();
 </script>
