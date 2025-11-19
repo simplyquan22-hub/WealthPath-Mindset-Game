@@ -1709,13 +1709,13 @@
         </div>
       `;
 
-      let timerHtml = "";
-      if (scenario.type === "timed") {
-        timerHtml = `<div class="timer-text" id="timerText">Time: 3s</div>`;
-      } else {
-        timerHtml = `<div class="timer-text" id="timerText"></div>`;
-      }
-
+      
+let timerHtml = "";
+if (scenario.type === "timed") {
+  timerHtml = `<div class="timer-text" id="timerText">Time: ${scenario.timeLimit || 5}s</div>`;
+} else {
+  timerHtml = `<div class="timer-text" id="timerText"></div>`;
+}
       let choicesHtml = scenario.choices
         .map(
           (choice, i) => `
