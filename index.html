@@ -266,10 +266,12 @@
     
  margin-bottom: 26px;
 }
-    .hero-note {
-      font-size: 0.76rem;
-      color: var(--muted);
-    }
+   .hero-note {
+  font-size: 0.76rem;
+  color: var(--muted);
+  display: block;        /* ← REQUIRED so margin works */
+  margin-top: 26px;      /* ← PUSHES the text DOWN */
+}
 
     .hero-note strong {
       color: #e5e7eb;
