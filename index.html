@@ -51,7 +51,7 @@
       z-index: 1;
       max-width: 1120px;
       margin: 0 auto;
-      padding: 16px 16px 32px;
+      padding: 0px 16px 32px;
     }
 
     @media (min-width: 768px) {
@@ -62,13 +62,7 @@
 
     /* HEADER */
 
-    .wp-header-wrap {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      padding-bottom: 12px;
-      backdrop-filter: blur(16px);
-    }
+ 
 
     .wp-header {
       display: flex;
@@ -304,6 +298,9 @@
         border-radius: 24px;
       }
     }
+    .game-title {
+  margin-top: -4px;
+}
 
     .game-header {
       text-align: center;
@@ -355,7 +352,7 @@
     .orb-wrap {
       display: flex;
       justify-content: center;
-      margin: 14px 0 14px;
+      margin: 4px 0 14px;
     }
 
     .orb {
@@ -838,22 +835,7 @@
   <div class="bg-particles"></div>
 
   <div class="page-shell">
-    <!-- HEADER -->
-    <div class="wp-header-wrap">
-      <header class="wp-header">
-        <div class="wp-brand">
-          <div class="wp-logo-orb"></div>
-          <div class="wp-title"><span>WealthPath</span> • Journey</div>
-        </div>
-        <nav class="wp-nav">
-          <a href="#" >Home</a>
-          <a href="#" >Courses</a>
-          <a href="#" >Portfolio Builder</a>
-          <a href="#" >Exam</a>
-          <a href="#" class="active">Mindset Game</a>
-        </nav>
-      </header>
-    </div>
+  
 
     <!-- HERO + GAME -->
     <div class="hero-grid">
@@ -887,11 +869,7 @@
         <div class="game-shell">
           <div class="game-card">
             <div class="game-header">
-              <div class="pill-wrap">
-                <div class="pill">
-                  <span class="pill-dot"></span>
-                  WealthPath • Mindset Game
-                </div>
+             
               </div>
               <h2 class="game-title">Mindset Journey</h2>
               <p class="game-subtitle" id="subtitle">
@@ -922,15 +900,36 @@
     </div>
 
     <!-- FOOTER -->
-    <footer class="wp-footer">
-      <span>© 2026 WealthPath. All rights reserved.</span>
-      <div class="wp-footer-links">
-        <a href="#">Contact</a>
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-      </div>
-    </footer>
-  </div>
+<footer class="wp-footer" style="
+  text-align:center;
+  padding:55px 20px;
+  margin-top:70px;
+  color:#9aa4b2;
+  font-size:0.9rem;
+">
+  <p style="color:#ffffff; font-weight:700; font-size:1.2rem;">
+    WealthPath
+  </p>
+
+  <p style="color:#e5e7eb; margin-top:6px; font-size:1rem;">
+    “A Journey Uniquely Yours”
+  </p>
+
+  <p style="margin-top:18px; color:#9aa4b2;">
+    Contact Us:
+    <a href="mailto:info@mywealthpath.org" style="color:#9aa4b2; text-decoration:none;">
+      info@mywealthpath.org
+    </a>
+  </p>
+
+  <p style="margin-top:16px; color:#9aa4b2;">
+    © <span id="wpYear"></span> WealthPath. All rights reserved.
+  </p>
+</footer>
+
+<script>
+  document.getElementById("wpYear").textContent = new Date().getFullYear();
+</script>
 
   <!-- GAME LOGIC (same engine, upgraded orb visuals) -->
   <script>
@@ -1434,19 +1433,19 @@
       if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
-    // HELPERS
-    function resetGame() {
-      state = "start";
-      index = 0;
-      stats = { discipline: 0, patience: 0, risk: 0, emotion: 0, vision: 0 };
-      orbLevel = 1;
-      lastReflection = "";
-      lastChoiceText = "";
-      lastDeltas = null;
-      clearTimer();
-      updateOrbVisual(true);
-      renderStartScreen();
-    }
+    //function resetGame() {
+  state = "start";
+  index = 0; // restart at scenario 1, but keep stats
+  // KEEP the existing stats so the orb does NOT reset
+  // KEEP the existing orbLevel so it stays grown
+
+  lastReflection = "";
+  lastChoiceText = "";
+  lastDeltas = null;
+  clearTimer();
+  updateOrbVisual(true); // orb stays the same size
+  renderStartScreen();
+}
 
     function clearTimer() {
       if (timerId) {
