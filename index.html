@@ -838,13 +838,7 @@
   <div class="bg-particles"></div>
 
   <div class="page-shell">
-    <!-- HEADER -->
-    <div class="wp-header-wrap">
-      <header class="wp-header">
-        <div class="wp-brand">
-          <div class="wp-logo-orb"></div>
-          <div class="wp-title"><span>WealthPath</span> • Journey</div>
-        </div>
+    
         <nav class="wp-nav">
           <a href="#" >Home</a>
           <a href="#" >Courses</a>
@@ -922,14 +916,36 @@
     </div>
 
     <!-- FOOTER -->
-    <footer class="wp-footer">
-      <span>© 2026 WealthPath. All rights reserved.</span>
-      <div class="wp-footer-links">
-        <a href="#">Contact</a>
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-      </div>
-    </footer>
+<footer class="wp-footer" style="
+  text-align:center;
+  padding:55px 20px;
+  margin-top:70px;
+  color:#9aa4b2;
+  font-size:0.9rem;
+">
+  <p style="color:#ffffff; font-weight:700; font-size:1.2rem;">
+    WealthPath
+  </p>
+
+  <p style="color:#e5e7eb; margin-top:6px; font-size:1rem;">
+    “A Journey Uniquely Yours”
+  </p>
+
+  <p style="margin-top:18px; color:#9aa4b2;">
+    Contact Us: 
+    <a href="mailto:info@mywealthpath.org" style="color:#9aa4b2; text-decoration:none;">
+      info@mywealthpath.org
+    </a>
+  </p>
+
+  <p style="margin-top:16px; color:#9aa4b2;">
+    © <span id="wpYear"></span> WealthPath. All rights reserved.
+  </p>
+</footer>
+
+<script>
+  document.getElementById("wpYear").textContent = new Date().getFullYear();
+</script>
   </div>
 
   <!-- GAME LOGIC (same engine, upgraded orb visuals) -->
@@ -1010,7 +1026,7 @@
         type: "timed",
         title: "Market Dip Live",
         text: "Your long-term investment drops 3% in a single day. You have 3 seconds. What’s your move?",
-        timeLimit: 3,
+        timeLimit: 5,
         choices: [
           {
             text: "Panic-sell everything right now.",
@@ -1213,7 +1229,7 @@
         type: "timed",
         title: "Limited-Time Hype",
         text: "A “once in a lifetime” offer pops up with a countdown clock. You have 3 seconds.",
-        timeLimit: 3,
+        timeLimit: 5,
         choices: [
           {
             text: "Buy now, think later — the timer is stressing me.",
@@ -1726,7 +1742,7 @@
       });
 
       if (scenario.type === "timed") {
-        startCountdown(scenario.timeLimit || 3);
+        startCountdown(scenario.timeLimit || 5);
       }
 
       footerNoteEl.textContent =
