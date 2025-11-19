@@ -51,7 +51,7 @@
       z-index: 1;
       max-width: 1120px;
       margin: 0 auto;
-      padding: 16px 16px 32px;
+      padding: 0px 16px 32px;
     }
 
     @media (min-width: 768px) {
@@ -257,7 +257,7 @@
       margin-bottom: 4px;
     }
     /* --- SPACING FIXES (ADDED BY CHATGPT) --- */
-
+/* SPACING FIXES */
 .hero-title {
   line-height: 1.22 !important;
   margin-bottom: 14px !important;
@@ -273,18 +273,17 @@
   line-height: 1.5 !important;
 }
 
-    .hero-cta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      margin-top: 4px;
-    }
+/* CTA + NOTE SPACING FIX */
+.hero-cta-row {
+  margin-top: 12px !important;
+  margin-bottom: 10px !important;
+}
 
-    .hero-note {
-      font-size: 0.76rem;
-      color: var(--muted);
-    }
+.hero-note {
+  margin-top: 6px !important;
+  margin-bottom: 4px !important;
+  line-height: 1.35 !important;
+}
 
     .hero-note strong {
       color: #e5e7eb;
@@ -1765,26 +1764,34 @@
           : "There’s no perfect choice here. Just notice which answer feels most like you right now.";
     }
 
-    function startCountdown(seconds) {
-      timerRemaining = seconds;
-      const timerTextEl = document.getElementById("timerText");
-      if (timerTextEl) {
-        timerTextEl.textContent = `Time: ${timerRemaining}s`;
-      }
-      clearTimer();
-      timerId = setInterval(() => {
-        timerRemaining--;
-        if (timerTextEl) {
-          timerTextEl.textContent = timerRemaining > 0 ? `Time: ${timerRemaining}s` : "Time!";
-        }
-        if (timerRemaining <= 0) {
-          clearTimer();
-          if (!choiceLocked) {
-            handleChoice(null, true);
-          }
-        }
-      }, 1000);
+  function startCountdown(seconds) {
+  clearTimer(); // PREVENTS FAST TIMER BUG
+  timerRemaining = seconds;
+
+  const timerTextEl = document.getElementById("timerText");
+
+  // Always show accurate starting time
+  if (timerTextEl) {
+    timerTextEl.textContent = `Time: ${timerRemaining}s`;
+  }
+
+  // EXACT 1-SECOND INTERVAL — FIXED
+  timerId = setInterval(() => {
+    timerRemaining--;
+
+    if (timerTextEl) {
+      timerTextEl.textContent =
+        timerRemaining > 0 ? `Time: ${timerRemaining}s` : "Time!";
     }
+
+    if (timerRemaining <= 0) {
+      clearTimer();
+      if (!choiceLocked) {
+        handleChoice(null, true); // timed-out response
+      }
+    }
+  }, 1000);
+}
 
     function handleChoice(choiceIndex, timedOut = false) {
       if (choiceLocked) return;
