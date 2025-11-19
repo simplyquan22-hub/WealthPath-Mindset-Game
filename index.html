@@ -928,17 +928,37 @@
       </section>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="wp-footer">
-      <span>© 2026 WealthPath. All rights reserved.</span>
-      <div class="wp-footer-links">
-        <a href="#">Contact</a>
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-      </div>
-    </footer>
-  </div>
+   <!-- FOOTER -->
+<footer class="wp-footer" style="
+    text-align:center;
+    padding:35px 20px;
+    margin-top:50px;
+    color:#9aa4b2;
+    font-size:0.9rem;
+">
 
+    <!-- Tagline -->
+    <p style="color:#ffffff; font-weight:600; margin-bottom:10px;">
+        WealthPath — “A Journey Uniquely Yours”
+    </p>
+
+    <!-- Copyright -->
+    <p style="margin-bottom:15px;">
+        © <span id="wpYear"></span> WealthPath. All rights reserved.
+    </p>
+
+    <!-- Contact Link -->
+    <p>
+        <a href="mailto:info@mywealthpath.org" 
+           style="color:#9aa4b2; text-decoration:none;">
+           Contact Us
+        </a>
+    </p>
+</footer>
+
+<script>
+  document.getElementById("wpYear").textContent = new Date().getFullYear();
+</script>
   <!-- GAME LOGIC (same engine, upgraded orb visuals) -->
   <script>
     // ---- GAME DATA (same as before) ----
