@@ -1010,7 +1010,7 @@
         type: "timed",
         title: "Market Dip Live",
         text: "Your long-term investment drops 3% in a single day. You have 3 seconds. What’s your move?",
-        timeLimit: 3,
+        timeLimit: 5,
         choices: [
           {
             text: "Panic-sell everything right now.",
@@ -1213,7 +1213,7 @@
         type: "timed",
         title: "Limited-Time Hype",
         text: "A “once in a lifetime” offer pops up with a countdown clock. You have 3 seconds.",
-        timeLimit: 3,
+        timeLimit: 5,
         choices: [
           {
             text: "Buy now, think later — the timer is stressing me.",
@@ -1726,7 +1726,7 @@
       });
 
       if (scenario.type === "timed") {
-        startCountdown(scenario.timeLimit || 3);
+        startCountdown(scenario.timeLimit || 5);
       }
 
       footerNoteEl.textContent =
