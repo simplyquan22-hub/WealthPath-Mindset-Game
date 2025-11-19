@@ -187,16 +187,15 @@
       }
     }
 
-    .hero-copy {
-      padding: 14px 12px 40px;
-    }
+  .hero-copy {
+  padding: 14px 12px 40px; /* ← bottom padding consistent everywhere */
+}
 
-    @media (min-width: 768px) {
-      .hero-copy {
-        padding: 18px 14px 18px;
-      }
-    }
-
+@media (min-width: 768px) {
+  .hero-copy {
+    padding: 18px 14px 40px; /* ← MATCH bottom padding here too */
+  }
+}
     .hero-kicker {
       display: inline-flex;
       align-items: center;
