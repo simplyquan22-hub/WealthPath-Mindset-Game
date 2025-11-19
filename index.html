@@ -1529,15 +1529,37 @@
       }
     }
 
-    function applyDeltas(deltas) {
-      if (!deltas) return;
-      stats.discipline += deltas.discipline || 0;
-      stats.patience += deltas.patience || 0;
-      stats.risk += deltas.risk || 0;
-      stats.emotion += deltas.emotion || 0;
-      stats.vision += deltas.vision || 0;
-    }
+  function applyDeltas(d) {
+  // Apply trait changes
+  stats.discipline += d.discipline || 0;
+  stats.patience   += d.patience   || 0;
+  stats.risk       += d.risk       || 0;
+  stats.emotion    += d.emotion    || 0;
+  stats.vision     += d.vision     || 0;
 
+  // Calculate total "mindset strength" from this choice
+  const sum =
+    (d.discipline || 0) +
+    (d.patience || 0) +
+    (d.risk || 0) +
+    (d.emotion || 0) +
+    (d.vision || 0);
+
+  // Apply orb growth based on choice quality
+  if (sum >= 3) {
+    // strong decision → bigger bump
+    orbLevel = Math.min(7, orbLevel + 1);
+    updateOrbVisual(false, true); // flash
+  } else if (sum >= 1) {
+    // neutral → slow growth (no flash)
+    orbLevel = Math.min(7, orbLevel + 0.3);
+    updateOrbVisual();
+  } else if (sum <= -2) {
+    // poor decision → slight shrink
+    orbLevel = Math.max(1, orbLevel - 0.5);
+    updateOrbVisual();
+  }
+}
     function getMindsetType(stats) {
       const entries = [
         ["discipline", stats.discipline],
