@@ -146,12 +146,6 @@ body {
   box-shadow:0 0 10px rgba(56,189,248,0.4);
 }
 
-/* HERO NOTE */
-.hero-note {
-  font-size:0.8rem;
-  color:var(--muted);
-}
-
 /* GAME CARD */
 .hero-card-shell {
   display:flex;
@@ -190,19 +184,6 @@ body {
   box-shadow:0 0 8px #22c55e;
 }
 
-.game-title {
-  text-align:center;
-  font-size:1.35rem;
-  font-weight:800;
-  letter-spacing:0.06em;
-}
-.game-subtitle {
-  text-align:center;
-  font-size:0.9rem;
-  color:var(--muted);
-  margin-top:6px;
-  margin-bottom:18px;
-}
 /* ORB CONTAINER */
 .orb-wrap {
   display:flex;
@@ -210,36 +191,34 @@ body {
   margin: 10px 0 18px;
 }
 
-/* NEW GLOWING ORB */
+/* ============================================
+   NEW ORB — glow wave + level speed scaling 
+============================================= */
 .orb {
   position:relative;
   width:130px;
   height:130px;
   border-radius:50%;
   background:radial-gradient(circle at 30% 20%, #e0f2fe, #0ea5e9 35%, #0369a1 70%, #020617 100%);
-  box-shadow:
-    0 0 40px rgba(56,189,248,0.7),
-    0 0 80px rgba(14,165,233,0.55),
-    0 0 110px rgba(250,204,21,0.25);
   display:flex;
   justify-content:center;
   align-items:center;
-  animation:orbBreath 6s ease-in-out infinite;
-  transition:0.4s ease;
+  transition:0.35s ease;
   overflow:visible;
+  animation:orbBreath 6s ease-in-out infinite;
 }
 
-/* INNER CORE */
+/* Inner core */
 .orb-core {
   width:60px;
   height:60px;
   border-radius:50%;
   background:radial-gradient(circle at 30% 20%, #fef9c3, #fbbf24 35%, #eab308 80%);
   box-shadow:0 0 25px rgba(250,204,21,0.9);
-  transition:0.4s ease;
+  transition:0.35s ease;
 }
 
-/* RINGS */
+/* Orbit rings with speed scaling by level */
 .orb-ring {
   position:absolute;
   border-radius:50%;
@@ -249,12 +228,11 @@ body {
   opacity:0.45;
 }
 
-/* Ring sizes */
-.orb-ring.r1 { width:155%; height:155%; animation-duration:14s; }
-.orb-ring.r2 { width:195%; height:195%; animation-duration:20s; opacity:0.35; }
-.orb-ring.r3 { width:240%; height:240%; animation-duration:28s; opacity:0.28; border-style:dashed; }
+.orb-ring.r1 { width:155%; height:155%; animation-duration: 18s; }
+.orb-ring.r2 { width:195%; height:195%; animation-duration: 26s; opacity:0.35; }
+.orb-ring.r3 { width:240%; height:240%; animation-duration: 34s; opacity:0.28; border-style:dashed; }
 
-/* PARTICLES */
+/* Particles */
 .orb-particles {
   position:absolute;
   inset:-18%;
@@ -264,180 +242,37 @@ body {
     radial-gradient(circle at 80% 20%, rgba(59,130,246,0.5) 0, transparent 70%);
   filter:blur(8px);
   opacity:0.45;
-  transition:0.4s ease;
 }
 
-/* ORB ANIMATIONS */
+/* Breathing animation */
 @keyframes orbBreath {
-  0%,100% {
-    box-shadow:
-      0 0 30px rgba(56,189,248,0.6),
-      0 0 80px rgba(14,165,233,0.4);
-  }
-  50% {
-    box-shadow:
-      0 0 55px rgba(56,189,248,0.9),
-      0 0 120px rgba(14,165,233,0.7);
-  }
+  0%,100% { transform:scale(1); }
+  50% { transform:scale(1.05); }
 }
 
+/* Ring spin speed scaling */
 @keyframes ringSpin {
   from { transform:rotate(0deg); }
   to { transform:rotate(360deg); }
 }
 
-@keyframes levelFlash {
-  0% {
-    box-shadow:
-      0 0 0 0 rgba(250,204,21,0.9),
-      0 0 40px rgba(56,189,248,0.7);
-  }
-  100% {
-    box-shadow:
-      0 0 0 22px rgba(250,204,21,0),
-      0 0 40px rgba(56,189,248,0.7);
-  }
-}
-
-/* LEVEL STYLES */
-.orb.level-1 { transform:scale(0.92); }
+/* LEVEL SIZES */
+.orb.level-1 { transform:scale(0.90); }
 .orb.level-2 { transform:scale(1.00); }
-.orb.level-3 { transform:scale(1.07); }
-.orb.level-4 { transform:scale(1.13); }
-.orb.level-5 { transform:scale(1.18); }
-.orb.level-6 { transform:scale(1.22); }
-.orb.level-7 { transform:scale(1.26); }
+.orb.level-3 { transform:scale(1.08); }
+.orb.level-4 { transform:scale(1.15); }
+.orb.level-5 { transform:scale(1.21); }
+.orb.level-6 { transform:scale(1.26); }
+.orb.level-7 { transform:scale(1.31); }
 
-/* Flash animation on level-up */
+/* NEW PREMIUM GOLD WAVE FLASH */
+@keyframes levelWave {
+  0% { box-shadow:0 0 0 0 rgba(250,204,21,0.8); }
+  100% { box-shadow:0 0 60px 40px rgba(250,204,21,0); }
+}
+
 .orb.level-up-flash {
-  animation: levelFlash 0.6s ease-out;
-}
-
-/* LABELS */
-.orb-label {
-  text-align:center;
-  color:var(--muted);
-  font-size:0.8rem;
-  margin-top:-4px;
-}
-.orb-level-text {
-  text-align:center;
-  color:var(--gold);
-  font-size:0.8rem;
-  margin-top:4px;
-}
-
-/* GAME SECTION */
-.section {
-  background:rgba(15,23,42,0.85);
-  border:1px solid rgba(51,65,85,0.9);
-  border-radius:16px;
-  padding:14px 12px 14px;
-  margin-top:12px;
-}
-
-.section-header {
-  text-transform:uppercase;
-  color:var(--muted);
-  font-size:0.75rem;
-  margin-bottom:8px;
-}
-
-.scenario-title {
-  font-size:1.05rem;
-  font-weight:600;
-  margin-bottom:6px;
-}
-
-.scenario-body {
-  color:var(--muted);
-  font-size:0.9rem;
-}
-
-/* CHOICES */
-.choices {
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  margin-top:12px;
-}
-
-.timer-text {
-  text-align:center;
-  font-size:1rem;
-  color:#f97316;
-  min-height:1.2em;
-  margin-bottom:6px;
-}
-
-/* REFLECTION */
-.reflection-text {
-  color:var(--muted);
-  font-size:0.9rem;
-  margin-top:8px;
-}
-
-/* STATS */
-.stats-row {
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:14px;
-}
-
-.stat-pill {
-  padding:4px 10px;
-  border-radius:999px;
-  border:1px solid rgba(148,163,184,0.5);
-  background:rgba(15,23,42,0.9);
-  font-size:0.8rem;
-  color:var(--muted);
-}
-.stat-pill strong { color:white; }
-
-/* PROGRESS */
-.footer-row {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-top:16px;
-  flex-wrap:wrap;
-  gap:10px;
-}
-
-.progress-line {
-  flex:1;
-  min-width:90px;
-  height:4px;
-  border-radius:999px;
-  background:rgba(30,64,175,0.6);
-  position:relative;
-  overflow:hidden;
-}
-.progress-fill {
-  position:absolute;
-  inset:0;
-  width:0%;
-  background:linear-gradient(to right,#22c55e,#38bdf8,#facc15);
-  box-shadow:0 0 8px rgba(56,189,248,0.9);
-  border-radius:inherit;
-  transition:width 0.6s ease;
-}
-
-.footer-small {
-  text-align:center;
-  color:var(--muted);
-  font-size:0.75rem;
-  margin-top:10px;
-}
-
-/* ANIMATION ENTER */
-.fade-enter {
-  animation:fadeInUp 0.4s ease forwards;
-}
-@keyframes fadeInUp {
-  0% { opacity:0; transform:translateY(8px); }
-  100% { opacity:1; transform:translateY(0); }
+  animation: levelWave 0.8s ease-out;
 }
 </style>
 </head>
@@ -462,8 +297,8 @@ body {
       </h1>
 
       <p class="hero-sub">
-        This isn’t a quiz. It’s a mirror.  
-        Walk through real-life money moments and watch your Wealth Orb evolve with every choice.
+        This isn’t a quiz. It’s a mirror.<br>
+        Walk through real-life money moments and watch your Wealth Orb evolve with every decision.
       </p>
 
       <ul class="hero-bullets">
@@ -477,7 +312,7 @@ body {
         <button class="btn-ghost" id="heroHowBtn">What does this measure?</button>
       </div>
 
-      <p class="hero-note"><strong>No login.</strong> No perfect score. Just awareness.</p>
+      <p class="hero-note"><strong>No login.</strong> No perfect score. Only awareness.</p>
 
     </section>
 
@@ -501,7 +336,7 @@ body {
             Every decision shapes your path.
           </p>
 
-          <!-- ORB (POSITION B) -->
+          <!-- ORB -->
           <div class="orb-wrap">
             <div class="orb level-1" id="orb">
               <div class="orb-core"></div>
@@ -515,7 +350,7 @@ body {
           <p class="orb-label" id="orbLabel">Level 1 • Spark</p>
           <p class="orb-level-text" id="orbHint"></p>
 
-          <!-- GAME CONTENT CONTAINER -->
+          <!-- GAME CONTENT -->
           <div id="content"></div>
 
           <p class="footer-small" id="footerNote">
@@ -529,7 +364,6 @@ body {
   </div><!-- /hero-grid -->
 
 </div><!-- /page-shell -->
-
 
 
 <!-- FOOTER -->
@@ -563,41 +397,40 @@ body {
 <script>
 document.getElementById("wpYear").textContent = new Date().getFullYear();
 </script>
-
-
-
 <!-- ======================
-     GAME LOGIC
+     GAME LOGIC ENGINE
 ========================= -->
 <script>
-/* -------------------------
-   GAME SCENARIOS
-------------------------- */
-const scenarios = [
-  /* I am not pasting 5000 lines here again — but don’t worry 👇  
-     You now paste the FULL scenarios array YOU ALREADY HAVE.
 
-     Your entire scenarios list from earlier goes RIGHT HERE,
-     replacing this comment.
-  */
-];
+/* -------------------------
+   SCENARIOS ARRAY PLACEHOLDER
+   (Part 4 will paste full 20)
+------------------------- */
+const scenarios = []; // Part 4 replaces this completely
 
 
 /* -------------------------
    GAME STATE
 ------------------------- */
-const TOTAL = scenarios.length;
-
 let index = 0;
-let stats = { discipline:0, patience:0, risk:0, emotion:0, vision:0 };
+let stats = {
+  discipline: 0,
+  patience: 0,
+  risk: 0,
+  emotion: 0,
+  vision: 0
+};
+
 let orbLevel = 1;
+let choiceLocked = false;
+let timerId = null;
+let timerRemaining = 0;
+
 let lastChoice = "";
 let lastReflection = "";
 let lastDeltas = null;
 
-let timerId = null;
-let timerRemaining = 0;
-let choiceLocked = false;
+const TOTAL = scenarios.length;
 
 const contentEl = document.getElementById("content");
 const subtitleEl = document.getElementById("subtitle");
@@ -610,39 +443,51 @@ const footerNoteEl = document.getElementById("footerNote");
 /* -------------------------
    HERO BUTTONS
 ------------------------- */
-document.getElementById("heroPlayBtn").onclick = () => {
-  startGame();
-};
-document.getElementById("heroHowBtn").onclick = () => {
-  renderHow();
-};
+document.getElementById("heroPlayBtn").onclick = () => startGame();
+document.getElementById("heroHowBtn").onclick = () => renderHow();
 
 
 /* -------------------------
    START GAME
 ------------------------- */
-function startGame(){
+function startGame() {
   index = 0;
   stats = { discipline:0, patience:0, risk:0, emotion:0, vision:0 };
   orbLevel = 1;
+
   updateOrb(true);
-  renderStart();
+  renderStartScreen();
 }
 
 
 /* -------------------------
-   ORB VISUAL UPDATE
+   UPDATE ORB VISUAL
 ------------------------- */
-function updateOrb(initial=false, flash=false){
-  
-  orbEl.classList.remove(
-    "level-1","level-2","level-3","level-4","level-5","level-6","level-7","level-up-flash"
-  );
+function updateOrb(initial = false, flash = false) {
 
+  orbEl.classList.remove(
+    "level-1","level-2","level-3","level-4","level-5","level-6","level-7",
+    "level-up-flash"
+  );
   orbEl.classList.add(`level-${orbLevel}`);
 
+  // Speeds per level (faster spinning the higher you go)
+  const speeds = {
+    1: "14s",
+    2: "12s",
+    3: "10s",
+    4: "8s",
+    5: "6s",
+    6: "5s",
+    7: "4s"
+  };
+
+  document.querySelector(".r1").style.animationDuration = speeds[orbLevel];
+  document.querySelector(".r2").style.animationDuration = speeds[orbLevel];
+  document.querySelector(".r3").style.animationDuration = speeds[orbLevel];
+
   const labels = [
-    "", 
+    "",
     "Level 1 • Spark",
     "Level 2 • Pulse",
     "Level 3 • Glow",
@@ -658,17 +503,17 @@ function updateOrb(initial=false, flash=false){
     "You're building awareness — that’s leverage.",
     "Your habits are aligning with your goals.",
     "You handle pressure with intention.",
-    "Your reactions are becoming responses.",
+    "You respond more, react less.",
     "You trust your future self.",
-    "This isn't perfection — it's growth."
+    "Mastery is not perfection — it's awareness."
   ];
 
   orbLabelEl.textContent = labels[orbLevel];
   orbHintEl.textContent = hints[orbLevel];
 
-  if(flash && !initial){
+  if (flash && !initial) {
     orbEl.classList.add("level-up-flash");
-    setTimeout(()=>orbEl.classList.remove("level-up-flash"),700);
+    setTimeout(() => orbEl.classList.remove("level-up-flash"), 900);
   }
 }
 
@@ -676,20 +521,20 @@ function updateOrb(initial=false, flash=false){
 /* -------------------------
    LEVEL CHECK
 ------------------------- */
-function checkLevel(){
+function checkLevel() {
   const completed = index + 1;
 
   let newLevel = 1;
-  if(completed >= 3) newLevel = 2;
-  if(completed >= 6) newLevel = 3;
-  if(completed >= 9) newLevel = 4;
-  if(completed >= 12) newLevel = 5;
-  if(completed >= 16) newLevel = 6;
-  if(completed >= 20) newLevel = 7;
+  if (completed >= 3) newLevel = 2;
+  if (completed >= 6) newLevel = 3;
+  if (completed >= 9) newLevel = 4;
+  if (completed >= 12) newLevel = 5;
+  if (completed >= 16) newLevel = 6;
+  if (completed >= 20) newLevel = 7;
 
-  if(newLevel !== orbLevel){
+  if (newLevel !== orbLevel) {
     orbLevel = newLevel;
-    updateOrb(false, true); // flash
+    updateOrb(false, true);
   } else {
     updateOrb();
   }
@@ -697,21 +542,20 @@ function checkLevel(){
 
 
 /* -------------------------
-   START SCREEN
+   START SCREEN CONTENT
 ------------------------- */
-function renderStart(){
+function renderStartScreen() {
   subtitleEl.textContent = "Every decision shapes your path.";
 
   contentEl.innerHTML = `
-    <div class="section fade-enter align-center">
+    <div class="section fade-enter">
       <div class="section-header">Your Journey</div>
       <p class="scenario-body">
-        This is a quick interactive mindset experience.
         You’ll face 20 real-life money moments.  
-        Some calm — some under a 5-second timer.
+        Some calm. Some under a 5-second timer.
       </p>
 
-      <div class="btn-row" style="margin-top:20px;">
+      <div class="btn-row" style="margin-top:18px;">
         <button class="btn-donate" id="startBtn">Begin Your Path</button>
         <button class="btn-ghost" id="howBtn2">How it works</button>
       </div>
@@ -724,16 +568,18 @@ function renderStart(){
 
 
 /* -------------------------
-   HOW IT WORKS
+   HOW IT WORKS SCREEN
 ------------------------- */
-function renderHow(){
+function renderHow() {
   contentEl.innerHTML = `
     <div class="section fade-enter">
       <div class="section-header">How It Works</div>
+
       <p class="scenario-body">
-        • 20 scenarios<br>
+        • 20 real scenarios<br>
         • 5 traits measured<br>
-        • Only timed scenarios show countdown
+        • Timed questions only when needed<br>
+        • No grades — only awareness
       </p>
 
       <div class="btn-row" style="margin-top:18px;">
@@ -742,39 +588,44 @@ function renderHow(){
     </div>
   `;
 
-  document.getElementById("backBtn").onclick = () => renderStart();
+  document.getElementById("backBtn").onclick = () => renderStartScreen();
 }
 
 
 /* -------------------------
    RENDER SCENARIO
 ------------------------- */
-function renderScenario(){
+function renderScenario() {
   choiceLocked = false;
 
   const sc = scenarios[index];
   const progress = Math.round((index / TOTAL) * 100);
 
-  subtitleEl.textContent = sc.type === "timed"
-    ? "Pressure moment — countdown starts."
-    : "Answer honestly. No perfect choices.";
+  subtitleEl.textContent =
+    sc.type === "timed"
+      ? "Pressure moment — countdown starts."
+      : "Answer honestly. No perfect choices.";
 
-  let timerHTML = sc.type === "timed"
-    ? `<div class="timer-text" id="timerText">Time: 5s</div>`
-    : `<div class="timer-text" id="timerText"></div>`;
+  const timerHTML =
+    sc.type === "timed"
+      ? `<div class="timer-text" id="timerText">Time: 5s</div>`
+      : `<div class="timer-text" id="timerText"></div>`;
 
-  let typeLabel =
-    sc.type === "timed"    ? "Timed" :
-    sc.type === "balanced" ? "Real-Life Tension" :
-                             "Reflection";
+  const typeLabel =
+    sc.type === "timed"
+      ? "Timed"
+      : sc.type === "balanced"
+      ? "Real-Life Tension"
+      : "Reflection";
 
   contentEl.innerHTML = `
     <div class="section fade-enter">
+
       <div class="footer-row" style="margin-bottom:10px;">
         <span style="font-size:0.75rem;color:var(--muted);">
-          Scenario ${index+1} of ${TOTAL}
+          Scenario ${index + 1} of ${TOTAL}
         </span>
-        <div class="pill-type"><span class="pill-type-dot"></span>${typeLabel}</div>
+        <div class="pill-type">${typeLabel}</div>
       </div>
 
       ${timerHTML}
@@ -783,25 +634,33 @@ function renderScenario(){
       <p class="scenario-body">${sc.text}</p>
 
       <div class="choices">
-        ${sc.choices.map((c,i)=>`
+        ${sc.choices
+          .map(
+            (c, i) => `
           <button class="btn-donate" data-choice="${i}">
             ${c.text}
           </button>
-        `).join("")}
+        `
+          )
+          .join("")}
       </div>
 
       <div class="footer-row">
-        <div class="progress-line"><div class="progress-fill" style="width:${progress}%;"></div></div>
+        <div class="progress-line">
+          <div class="progress-fill" style="width:${progress}%;"></div>
+        </div>
         <span style="font-size:0.75rem;">${progress}%</span>
       </div>
     </div>
   `;
 
-  document.querySelectorAll("[data-choice]").forEach(btn=>{
-    btn.onclick = ()=> choose(btn.getAttribute("data-choice"));
+  // button listeners
+  document.querySelectorAll("[data-choice]").forEach((btn) => {
+    btn.onclick = () => choose(btn.getAttribute("data-choice"));
   });
 
-  if(sc.type === "timed") startTimer(5);
+  // start timer ONLY for timed
+  if (sc.type === "timed") startTimer(5);
 
   footerNoteEl.textContent =
     sc.type === "timed"
@@ -811,31 +670,48 @@ function renderScenario(){
 
 
 /* -------------------------
-   TIMER
+   TIMER LOGIC
 ------------------------- */
-function startTimer(seconds){
+function startTimer(seconds) {
   timerRemaining = seconds;
-
   const el = document.getElementById("timerText");
-  if(el) el.textContent = `Time: ${timerRemaining}s`;
 
-  timerId = setInterval(()=>{
+  if (el) el.textContent = `Time: ${timerRemaining}s`;
+
+  timerId = setInterval(() => {
     timerRemaining--;
-    if(el) el.textContent =
-      timerRemaining > 0 ? `Time: ${timerRemaining}s` : "Time!";
 
-    if(timerRemaining <= 0){
-      clearInterval(timerId);
-      if(!choiceLocked) timeoutChoice();
+    if (el) {
+      el.textContent =
+        timerRemaining > 0 ? `Time: ${timerRemaining}s` : "Time!";
     }
-  },1000);
+
+    if (timerRemaining <= 0) {
+      clearInterval(timerId);
+      if (!choiceLocked) handleTimeout();
+    }
+  }, 1000);
 }
 
-function timeoutChoice(){
+
+/* -------------------------
+   TIMEOUT (NO CHOICE MADE)
+------------------------- */
+function handleTimeout() {
   choiceLocked = true;
+
   lastChoice = "No response — timer ran out.";
-  lastReflection = "Freezing is still a decision. Practicing small calm choices builds confidence.";
-  lastDeltas = { discipline:-1, patience:-1, risk:-1, emotion:-2, vision:-1 };
+  lastReflection =
+    "Freezing is still a decision. Practicing small calm choices builds confidence.";
+
+  lastDeltas = {
+    discipline: -1,
+    patience: -1,
+    risk: -1,
+    emotion: -2,
+    vision: -1
+  };
+
   applyDeltas(lastDeltas);
   showReflection();
 }
@@ -844,8 +720,8 @@ function timeoutChoice(){
 /* -------------------------
    CHOICE SELECTED
 ------------------------- */
-function choose(i){
-  if(choiceLocked) return;
+function choose(i) {
+  if (choiceLocked) return;
   choiceLocked = true;
 
   clearInterval(timerId);
@@ -865,22 +741,22 @@ function choose(i){
 /* -------------------------
    APPLY DELTAS
 ------------------------- */
-function applyDeltas(d){
+function applyDeltas(d) {
   stats.discipline += d.discipline || 0;
-  stats.patience   += d.patience   || 0;
-  stats.risk       += d.risk       || 0;
-  stats.emotion    += d.emotion    || 0;
-  stats.vision     += d.vision     || 0;
+  stats.patience += d.patience || 0;
+  stats.risk += d.risk || 0;
+  stats.emotion += d.emotion || 0;
+  stats.vision += d.vision || 0;
 }
 
 
 /* -------------------------
    REFLECTION SCREEN
 ------------------------- */
-function showReflection(){
-  checkLevel(); // level up detection
+function showReflection() {
+  checkLevel();
 
-  const progress = Math.round(((index+1)/TOTAL)*100);
+  const progress = Math.round(((index + 1) / TOTAL) * 100);
 
   contentEl.innerHTML = `
     <div class="section fade-enter">
@@ -894,15 +770,22 @@ function showReflection(){
       <p class="reflection-text">${lastReflection}</p>
 
       <div class="stats-row">
-        ${Object.entries(lastDeltas).map(([k,v])=>`
+        ${Object.entries(lastDeltas)
+          .map(
+            ([k, v]) => `
           <div class="stat-pill">
-            <strong>${k.charAt(0).toUpperCase()+k.slice(1)}</strong> ${v>0?`+${v}`:v}
+            <strong>${k.charAt(0).toUpperCase() + k.slice(1)}</strong>
+            ${v > 0 ? `+${v}` : v}
           </div>
-        `).join("")}
+        `
+          )
+          .join("")}
       </div>
 
       <div class="footer-row">
-        <div class="progress-line"><div class="progress-fill" style="width:${progress}%;"></div></div>
+        <div class="progress-line">
+          <div class="progress-fill" style="width:${progress}%;"></div>
+        </div>
         <span style="font-size:0.75rem;">${progress}%</span>
       </div>
 
@@ -912,21 +795,23 @@ function showReflection(){
     </div>
   `;
 
-  document.getElementById("continueBtn").onclick = ()=>{
+  document.getElementById("continueBtn").onclick = () => {
     index++;
-    if(index >= TOTAL) finishGame();
+    if (index >= TOTAL) finishGame();
     else renderScenario();
   };
 
-  footerNoteEl.textContent = "Reflection creates awareness — awareness creates change.";
+  footerNoteEl.textContent =
+    "Reflection creates awareness — awareness creates change.";
 }
 
 
 /* -------------------------
    FINISH SCREEN
 ------------------------- */
-function finishGame(){
-  subtitleEl.textContent = "Session complete — this isn’t a grade, it’s a mirror.";
+function finishGame() {
+  subtitleEl.textContent =
+    "Session complete — this isn’t a grade, it’s a mirror.";
 
   contentEl.innerHTML = `
     <div class="section fade-enter">
@@ -937,29 +822,552 @@ function finishGame(){
       </p>
 
       <div class="stats-row" style="margin-top:14px;">
-        ${Object.entries(stats).map(([k,v])=>`
+        ${Object.entries(stats)
+          .map(
+            ([k, v]) => `
           <div class="stat-pill">
-            <strong>${k.charAt(0).toUpperCase()+k.slice(1)}:</strong> ${v}
+            <strong>${k.charAt(0).toUpperCase() + k.slice(1)}:</strong> ${v}
           </div>
-        `).join("")}
+        `
+          )
+          .join("")}
       </div>
 
       <div class="btn-row" style="margin-top:20px;">
         <button class="btn-donate" id="replayBtn">Play Again</button>
       </div>
-
     </div>
   `;
 
   document.getElementById("replayBtn").onclick = () => startGame();
 
-  footerNoteEl.textContent = "Replay any time — awareness changes day to day.";
+  footerNoteEl.textContent =
+    "Replay anytime — awareness changes day to day.";
 }
 
-
-/* INIT */
-startGame();
 </script>
+<script>
+const scenarios = [
 
-</body>
-</html>
+/* -----------------------------
+   1. IMPULSE BUY (timed)
+------------------------------ */
+{
+  type: "timed",
+  title: "A new shoe drop just went live.",
+  text: "You’ve been wanting them… but they weren’t in the budget this month.",
+  choices: [
+    {
+      text: "Buy instantly — you’ll figure it out later.",
+      deltas: { discipline:-2, emotion:+1, risk:+1 },
+      reflection: "Acting fast gives temporary excitement but long-term friction. Noticing impulse is progress."
+    },
+    {
+      text: "Pause. Check your budget before deciding.",
+      deltas: { discipline:+2, patience:+1 },
+      reflection: "You slowed down a fast emotion. That’s a powerful financial skill."
+    },
+    {
+      text: "Skip it — you know it can wait.",
+      deltas: { discipline:+3, patience:+1, vision:+1 },
+      reflection: "Choosing alignment over impulse builds long-term confidence."
+    }
+  ]
+},
+
+/* -----------------------------
+   2. FRIEND WANTS TO BORROW MONEY (balanced)
+------------------------------ */
+{
+  type: "balanced",
+  title: "A close friend asks to borrow $100.",
+  text: "They say they’ll pay you back, but you aren’t sure they can.",
+  choices: [
+    {
+      text: "Say yes — you don’t want conflict.",
+      deltas: { emotion:-1, discipline:-1 },
+      reflection: "Avoiding discomfort can create future tension. Boundaries are part of financial peace."
+    },
+    {
+      text: "Say no — you can’t risk not getting it back.",
+      deltas: { discipline:+1, risk:+1 },
+      reflection: "Protecting your financial stability matters. Honesty prevents resentment."
+    },
+    {
+      text: "Offer help without giving money.",
+      deltas: { vision:+1, emotion:+1, discipline:+1 },
+      reflection: "Healthy support doesn’t require sacrificing your financial security."
+    }
+  ]
+},
+
+/* -----------------------------
+   3. MARKET DIP (reflection)
+------------------------------ */
+{
+  type: "reflection",
+  title: "Your investments drop 8% in one week.",
+  text: "Your emotions flare, but nothing fundamentally changed.",
+  choices: [
+    {
+      text: "Panic and think about selling everything.",
+      deltas: { emotion:-2, patience:-1 },
+      reflection: "Panic is normal — but rarely helpful. Awareness builds emotional resilience."
+    },
+    {
+      text: "Do nothing — stay calm.",
+      deltas: { patience:+2 },
+      reflection: "Patience is a wealth superpower. Not reacting is a decision too."
+    },
+    {
+      text: "Re-evaluate your long-term plan.",
+      deltas: { vision:+2 },
+      reflection: "Grounding yourself in your long-term goals builds clarity under volatility."
+    }
+  ]
+},
+
+/* -----------------------------
+   4. TAX RETURN SPLIT (balanced)
+------------------------------ */
+{
+  type: "balanced",
+  title: "You receive a $900 tax refund.",
+  text: "You want to enjoy it, but you also want progress.",
+  choices: [
+    {
+      text: "Spend it all — you deserve it.",
+      deltas: { emotion:+1, discipline:-2 },
+      reflection: "Treating yourself is fine, but balance protects your future self."
+    },
+    {
+      text: "Split it: invest some, save some, enjoy some.",
+      deltas: { discipline:+2, vision:+1 },
+      reflection: "Balance is a powerful, sustainable approach."
+    },
+    {
+      text: "Invest the full amount.",
+      deltas: { discipline:+3, vision:+2 },
+      reflection: "Investing builds momentum — but moderation also matters."
+    }
+  ]
+},
+
+/* -----------------------------
+   5. SMALL DEBT CHOICE (timed)
+------------------------------ */
+{
+  type: "timed",
+  title: "A bill is due today — $40 late fee if missed.",
+  text: "You forgot. Timer starts.",
+  choices: [
+    {
+      text: "Ignore it — handle it later.",
+      deltas: { discipline:-2, emotion:-1 },
+      reflection: "Avoidance increases stress. Tiny tasks compound into big outcomes."
+    },
+    {
+      text: "Pay it immediately.",
+      deltas: { discipline:+2 },
+      reflection: "Quick responsibility reduces financial drag."
+    },
+    {
+      text: "Set up auto-pay for next month.",
+      deltas: { vision:+1, discipline:+1 },
+      reflection: "Removing future friction is a high-level money habit."
+    }
+  ]
+},
+
+/* -----------------------------
+   6. IRRELEVANT AD TEMPTATION (reflection)
+------------------------------ */
+{
+  type: "reflection",
+  title: "You see an ad for a new gadget you don’t need.",
+  text: "It looks cool. But… do you really want it?",
+  choices: [
+    {
+      text: "Add to cart but don’t buy.",
+      deltas: { emotion:-1 },
+      reflection: "Parking temptation is one way to regain control."
+    },
+    {
+      text: "Scroll past it.",
+      deltas: { discipline:+1 },
+      reflection: "Not every impulse deserves attention."
+    },
+    {
+      text: "Research it deeply before deciding.",
+      deltas: { vision:+1, patience:+1 },
+      reflection: "A curious pause can reveal what you truly value."
+    }
+  ]
+},
+
+/* -----------------------------
+   7. SAVING VS INVESTING (balanced)
+------------------------------ */
+{
+  type: "balanced",
+  title: "You saved $400. You’re unsure: save more or invest?",
+  text: "Both seem important.",
+  choices: [
+    {
+      text: "Save it all — safety first.",
+      deltas: { patience:+1, risk:-1 },
+      reflection: "Security brings comfort, but growth requires some long-term risk."
+    },
+    {
+      text: "Invest it all — growth mindset.",
+      deltas: { vision:+1, risk:+1 },
+      reflection: "Growth requires discomfort, but balance protects you."
+    },
+    {
+      text: "Split between savings + investing.",
+      deltas: { discipline:+1, patience:+1, vision:+1 },
+      reflection: "Balance compounds consistency."
+    }
+  ]
+},
+
+/* -----------------------------
+   8. INCOME INCREASE (reflection)
+------------------------------ */
+{
+  type: "reflection",
+  title: "You receive a raise at work.",
+  text: "Your lifestyle is tempting you to upgrade everything.",
+  choices: [
+    {
+      text: "Upgrade everything right away.",
+      deltas: { emotion:+1, discipline:-2 },
+      reflection: "Lifestyle creep feels good short-term but creates long-term stress."
+    },
+    {
+      text: "Upgrade one thing — keep rest stable.",
+      deltas: { discipline:+1 },
+      reflection: "Controlled rewards maintain progress while honoring your growth."
+    },
+    {
+      text: "Increase investing percentage first.",
+      deltas: { discipline:+2, vision:+2 },
+      reflection: "Paying future-you first accelerates wealth-building."
+    }
+  ]
+},
+
+/* -----------------------------
+   9. SOCIAL PRESSURE PURCHASE (timed)
+------------------------------ */
+{
+  type: "timed",
+  title: "Friends want to book an expensive trip.",
+  text: "They pressure you to say yes. Timer starts.",
+  choices: [
+    {
+      text: "Say yes immediately — don’t be left out.",
+      deltas: { emotion:-2, discipline:-1 },
+      reflection: "Avoidance of discomfort often becomes financial regret later."
+    },
+    {
+      text: "Say no — you need financial stability.",
+      deltas: { discipline:+2, vision:+1 },
+      reflection: "Protecting goals matters more than temporary approval."
+    },
+    {
+      text: "Offer a cheaper alternative.",
+      deltas: { emotion:+1, vision:+1 },
+      reflection: "You honored your limits and offered a solution — strong mindset."
+    }
+  ]
+},
+
+/* -----------------------------
+   10. INVESTING FEAR (reflection)
+------------------------------ */
+{
+  type: "reflection",
+  title: "You want to invest but feel overwhelmed.",
+  text: "It feels risky — even if you know long-term growth matters.",
+  choices: [
+    {
+      text: "Delay another month.",
+      deltas: { discipline:-1, emotion:-1 },
+      reflection: "Avoiding fear builds more fear. Small steps reduce it."
+    },
+    {
+      text: "Start with a small amount.",
+      deltas: { discipline:+1, vision:+1 },
+      reflection: "Consistency wins over perfection."
+    },
+    {
+      text: "Learn one simple investing rule today.",
+      deltas: { vision:+2 },
+      reflection: "Knowledge lowers fear — slowly and sustainably."
+    }
+  ]
+},
+
+/* -----------------------------
+   11. IMPULSE SUBSCRIPTION (balanced)
+------------------------------ */
+{
+  type: "balanced",
+  title: "A streaming service offers a 7-day free trial.",
+  text: "But you know these trials often auto-renew.",
+  choices: [
+    {
+      text: "Start trial and hope you remember to cancel.",
+      deltas: { discipline:-2 },
+      reflection: "Awareness without systems leads to accidental spending."
+    },
+    {
+      text: "Skip it — you know the trap.",
+      deltas: { discipline:+2, emotion:+1 },
+      reflection: "You chose clarity over temptation."
+    },
+    {
+      text: "Set a reminder before starting the trial.",
+      deltas: { vision:+1, discipline:+1 },
+      reflection: "Systems protect your money better than willpower."
+    }
+  ]
+},
+
+/* -----------------------------
+   12. PAYDAY FEELING (reflection)
+------------------------------ */
+{
+  type: "reflection",
+  title: "You just got paid.",
+  text: "Your mind instantly goes to things you want.",
+  choices: [
+    {
+      text: "Spend first, save later.",
+      deltas: { discipline:-1 },
+      reflection: "This pattern feels good but delays progress."
+    },
+    {
+      text: "Save first, then decide.",
+      deltas: { discipline:+2 },
+      reflection: "Ordering your decisions protects future momentum."
+    },
+    {
+      text: "Automate saving + investing.",
+      deltas: { vision:+2, discipline:+1 },
+      reflection: "Automation removes friction and boosts discipline."
+    }
+  ]
+},
+
+/* -----------------------------
+   13. SMALL WIN (balanced)
+------------------------------ */
+{
+  type: "balanced",
+  title: "You resisted an unnecessary purchase.",
+  text: "You feel proud… but also want a reward.",
+  choices: [
+    {
+      text: "Reward yourself immediately.",
+      deltas: { emotion:+1 },
+      reflection: "Rewards are healthy — as long as they don’t undo progress."
+    },
+    {
+      text: "Celebrate without spending.",
+      deltas: { discipline:+1 },
+      reflection: "Your identity grows strongest from your behaviors."
+    },
+    {
+      text: "Use the money toward a goal.",
+      deltas: { vision:+1, discipline:+1 },
+      reflection: "Redirecting small wins compounds massively."
+    }
+  ]
+},
+
+/* -----------------------------
+   14. NEGATIVE NEWS (reflection)
+------------------------------ */
+{
+  type: "reflection",
+  title: "The news predicts recession.",
+  text: "You feel anxious even though predictions are uncertain.",
+  choices: [
+    {
+      text: "React emotionally — feel doom.",
+      deltas: { emotion:-2 },
+      reflection: "Fear-based reactions are understandable but unhelpful."
+    },
+    {
+      text: "Focus on your long-term plan.",
+      deltas: { vision:+2 },
+      reflection: "Your strategy matters more than headlines."
+    },
+    {
+      text: "Reduce news consumption.",
+      deltas: { emotion:+1, discipline:+1 },
+      reflection: "Protecting your mind protects your wealth decisions."
+    }
+  ]
+},
+
+/* -----------------------------
+   15. SIDE HUSTLE CHOICE (balanced)
+------------------------------ */
+{
+  type: "balanced",
+  title: "You have free time on weekends.",
+  text: "A side hustle could bring extra money… but you value rest.",
+  choices: [
+    {
+      text: "Start a hustle immediately.",
+      deltas: { discipline:+1, vision:+1 },
+      reflection: "Momentum is great — as long as you avoid burnout."
+    },
+    {
+      text: "Protect rest — do nothing.",
+      deltas: { emotion:+1 },
+      reflection: "Mental health is a financial asset too."
+    },
+    {
+      text: "Brainstorm ideas first.",
+      deltas: { vision:+2, patience:+1 },
+      reflection: "Planning before acting often leads to smarter action."
+    }
+  ]
+},
+
+/* -----------------------------
+   16. CREDIT CARD OFFER (timed)
+------------------------------ */
+{
+  type: "timed",
+  title: "A credit card pre-approval pops up.",
+  text: "The perks look tempting. Timer starts.",
+  choices: [
+    {
+      text: "Accept immediately.",
+      deltas: { risk:+1, discipline:-1 },
+      reflection: "Fast yeses often ignore long-term costs."
+    },
+    {
+      text: "Decline instantly.",
+      deltas: { discipline:+2 },
+      reflection: "You avoided unnecessary temptation."
+    },
+    {
+      text: "Research the card first.",
+      deltas: { vision:+1, patience:+1 },
+      reflection: "Thinking before committing protects you."
+    }
+  ]
+},
+
+/* -----------------------------
+   17. SLOW MONTH (reflection)
+------------------------------ */
+{
+  type: "reflection",
+  title: "Your month had unexpected expenses.",
+  text: "You feel behind — maybe disappointed.",
+  choices: [
+    {
+      text: "Beat yourself up.",
+      deltas: { emotion:-2 },
+      reflection: "Negative self-talk slows progress and clouds clarity."
+    },
+    {
+      text: "Track the month honestly.",
+      deltas: { discipline:+1 },
+      reflection: "Honesty creates learning — not guilt."
+    },
+    {
+      text: "Adjust future plans calmly.",
+      deltas: { vision:+1, patience:+1 },
+      reflection: "Adaptability creates long-term success."
+    }
+  ]
+},
+
+/* -----------------------------
+   18. LONG-TERM GOAL (balanced)
+------------------------------ */
+{
+  type: "balanced",
+  title: "You want to build long-term wealth.",
+  text: "But you feel stuck on what to do next.",
+  choices: [
+    {
+      text: "Do nothing — wait for motivation.",
+      deltas: { discipline:-1 },
+      reflection: "Waiting rarely builds momentum."
+    },
+    {
+      text: "Pick ONE step to commit to.",
+      deltas: { discipline:+2 },
+      reflection: "Small consistent steps move mountains."
+    },
+    {
+      text: "Write a 30-day plan.",
+      deltas: { vision:+2, discipline:+1 },
+      reflection: "Clarity fuels consistency."
+    }
+  ]
+},
+
+/* -----------------------------
+   19. OVERSLEEP (reflection)
+------------------------------ */
+{
+  type: "reflection",
+  title: "You overslept and skipped your morning routine.",
+  text: "You feel off — maybe disappointed.",
+  choices: [
+    {
+      text: "Let the whole day fall apart.",
+      deltas: { emotion:-2 },
+      reflection: "One moment doesn’t define the day. Resetting is powerful."
+    },
+    {
+      text: "Restart mid-day.",
+      deltas: { discipline:+1 },
+      reflection: "Recovery builds resilience."
+    },
+    {
+      text: "Reflect without judgment.",
+      deltas: { emotion:+1, vision:+1 },
+      reflection: "Self-compassion enhances long-term growth."
+    }
+  ]
+},
+
+/* -----------------------------
+   20. THE FINAL TEST (timed)
+------------------------------ */
+{
+  type: "timed",
+  title: "You see a sudden opportunity to invest.",
+  text: "Your heart races. Timer starts.",
+  choices: [
+    {
+      text: "Jump in without research.",
+      deltas: { risk:+2, emotion:-1 },
+      reflection: "Impulses in investing often lead to regret."
+    },
+    {
+      text: "Skip it — you don’t trust it.",
+      deltas: { discipline:+1 },
+      reflection: "Avoiding unknown risk protects you."
+    },
+    {
+      text: "Research quickly but calmly.",
+      deltas: { vision:+2, discipline:+1 },
+      reflection: "Combining speed with logic is high-level decision-making."
+    }
+  ]
+}
+
+]; // END SCENARIOS ARRAY
+</script>
