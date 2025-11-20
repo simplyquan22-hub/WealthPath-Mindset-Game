@@ -43,6 +43,36 @@ body {
 }
 
 /* ---------------------------------------------------------
+   ANIMATIONS (Shake & Confetti)
+--------------------------------------------------------- */
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.shake-anim {
+  animation: shake 0.5s;
+  color: var(--red) !important; /* Flash red text slightly */
+}
+
+/* Confetti Particle */
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ---------------------------------------------------------
    INTRO CINEMATIC
 --------------------------------------------------------- */
 #intro-overlay {
@@ -112,6 +142,7 @@ body {
   margin: auto;
   padding: 20px;
   text-align: center;
+  transition: transform 0.1s;
 }
 
 /* ---------------------------------------------------------
@@ -189,7 +220,7 @@ body {
   box-shadow: 0 0 25px var(--blue), 0 0 50px var(--blue);
   transition: all 0.4s ease;
   animation: orbPulse 4s ease-in-out infinite;
-  position: relative; /* Anchor for particles/text if needed */
+  position: relative;
 }
 @keyframes orbPulse {
   0% { transform: scale(1); }
@@ -265,7 +296,17 @@ body {
   max-width: 420px;
   display: block;
   margin: 0 auto;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
 }
+/* IMPROVEMENT: Hover Effect */
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(56, 189, 248, 0.15);
+}
+.button:active {
+    transform: scale(0.98);
+}
+
 .button::after {
   content: "";
   position: absolute;
@@ -384,7 +425,7 @@ body {
 }
 #chart-container {
   position: relative;
-  height: 300px;
+  height: 350px; /* Increased height for Radar */
   width: 100%;
   max-width: 500px;
   margin: 0 auto 30px auto;
@@ -463,6 +504,79 @@ body {
 </div>
 
 <script>
+/* ---------------------------------------------------------
+   AUDIO CONFIGURATION (Placeholders)
+   Ideally, replace these URLs with local files or valid URLs.
+--------------------------------------------------------- */
+// You can download simple free sounds from Pixabay.com
+const audioClick = new Audio('');   // e.g. 'sounds/click.mp3'
+const audioGood  = new Audio('');   // e.g. 'sounds/chime.mp3'
+const audioBad   = new Audio('');   // e.g. 'sounds/thud.mp3'
+const audioWin   = new Audio('');   // e.g. 'sounds/levelup.mp3'
+
+// Adjust volume
+audioClick.volume = 0.3;
+audioGood.volume = 0.4;
+audioBad.volume = 0.4;
+
+function playSound(type) {
+  // Simple check to see if src is set before playing
+  if (type === 'click' && audioClick.src) audioClick.play().catch(e=>{});
+  if (type === 'good' && audioGood.src) { audioGood.currentTime=0; audioGood.play().catch(e=>{}); }
+  if (type === 'bad' && audioBad.src) { audioBad.currentTime=0; audioBad.play().catch(e=>{}); }
+  if (type === 'win' && audioWin.src) { audioWin.currentTime=0; audioWin.play().catch(e=>{}); }
+}
+
+/* ---------------------------------------------------------
+   VISUAL EFFECTS: SHAKE & CONFETTI
+--------------------------------------------------------- */
+function triggerShake() {
+    const container = document.getElementById('game-container');
+    container.classList.remove('shake-anim'); // reset
+    void container.offsetWidth; // trigger reflow
+    container.classList.add('shake-anim');
+    
+    setTimeout(() => {
+        container.classList.remove('shake-anim');
+    }, 500);
+}
+
+function triggerConfetti() {
+    const orb = document.getElementById("orb");
+    const rect = orb.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    for(let i=0; i<30; i++) {
+        const conf = document.createElement("div");
+        conf.classList.add("confetti-piece");
+        
+        // Random colors
+        const colors = ['#facc15', '#38bdf8', '#22e6a6', '#ffffff'];
+        conf.style.background = colors[Math.floor(Math.random()*colors.length)];
+        
+        conf.style.left = centerX + 'px';
+        conf.style.top = centerY + 'px';
+        document.body.appendChild(conf);
+
+        // Random direction
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 100 + Math.random() * 200;
+        const tx = Math.cos(angle) * velocity;
+        const ty = Math.sin(angle) * velocity;
+
+        // Animate
+        conf.animate([
+            { transform: `translate(0,0) scale(1)`, opacity: 1 },
+            { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
+        ], {
+            duration: 800 + Math.random() * 400,
+            easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+            fill: 'forwards'
+        }).onfinish = () => conf.remove();
+    }
+}
+
 /* ---------------------------------------------------------
    PARTICLES GENERATION
 --------------------------------------------------------- */
@@ -843,16 +957,22 @@ function evolveOrb() {
   // Color stage changes
   if (orbSize > 160 && orbStage === 0) {
     orbStage = 1;
-    orb.style.background =
-      `radial-gradient(circle at center, var(--teal), #0ddbb8, #0b9e84 70%)`;
+    orb.style.background = `radial-gradient(circle at center, var(--teal), #0ddbb8, #0b9e84 70%)`;
     orb.style.boxShadow = `0 0 30px var(--teal), 0 0 60px var(--teal)`;
+    
+    // Sound + Visual FX for level up
+    playSound('win');
+    triggerConfetti();
   }
 
   if (orbSize > 210 && orbStage === 1) {
     orbStage = 2;
-    orb.style.background =
-      `radial-gradient(circle at center, var(--gold), #eab308, #b45309 70%)`;
+    orb.style.background = `radial-gradient(circle at center, var(--gold), #eab308, #b45309 70%)`;
     orb.style.boxShadow = `0 0 35px var(--gold), 0 0 70px var(--gold)`;
+
+    // Sound + Visual FX for level up
+    playSound('win');
+    triggerConfetti();
   }
 }
 
@@ -890,7 +1010,7 @@ function renderQuestion() {
     btn.classList.add("choice-btn");
 
     btn.innerHTML = `
-      <button class="button" onclick="selectChoice(${i})">
+      <button class="button" onclick="selectChoice(${i})" onmouseenter="playSound('click')">
         <div class="blob1"></div>
         <div class="blob2"></div>
         <div class="inner">${choice.label}</div>
@@ -917,7 +1037,7 @@ function showLevelTransition(nextTitle) {
 }
 
 /* ---------------------------------------------------------
-   SPAWN FLOATING TEXT (NEW)
+   SPAWN FLOATING TEXT
 --------------------------------------------------------- */
 function spawnFloatingText(text, type) {
   const el = document.createElement("div");
@@ -928,7 +1048,7 @@ function spawnFloatingText(text, type) {
   const orb = document.getElementById("orb");
   const rect = orb.getBoundingClientRect();
   
-  // Random offset so they don't stack perfectly on top of each other
+  // Random offset
   const randX = Math.random() * 40 - 20; 
 
   el.style.left = (rect.left + rect.width/2 - 30 + randX) + "px";
@@ -950,10 +1070,13 @@ function selectChoice(index) {
   const question = level.questions[currentQuestion];
   const choice = question.choices[index];
 
-  // Apply attribute effects & Spawn Text
+  // Determine if choice is generally "good" or "bad" for sound/FX
+  let netScore = 0;
   let delay = 0;
+
   for (let key in choice.effects) {
     attributes[key] += choice.effects[key];
+    netScore += choice.effects[key];
     
     const val = choice.effects[key];
     const sign = val > 0 ? "+" : "";
@@ -964,7 +1087,15 @@ function selectChoice(index) {
     setTimeout(() => {
       spawnFloatingText(`${sign}${val} ${label}`, textClass);
     }, delay);
-    delay += 300; // stagger the text
+    delay += 300;
+  }
+
+  // AUDIO & SHAKE TRIGGER
+  if (netScore < 0) {
+      playSound('bad');
+      triggerShake();
+  } else {
+      playSound('good');
   }
 
   // Increase answered count + progress
@@ -995,67 +1126,77 @@ function selectChoice(index) {
 }
 
 /* ---------------------------------------------------------
-   END GAME & RENDER CHART
+   START & END GAME LOGIC (Recovered & Fixed)
 --------------------------------------------------------- */
+function startGameFromIntro() {
+  const intro = document.getElementById("intro-overlay");
+  intro.classList.add("fade-out");
+  playSound('click');
+  
+  setTimeout(() => {
+    intro.style.display = "none";
+    renderQuestion();
+    updateProgress();
+  }, 700);
+}
+
 function endGame() {
-  document.getElementById("choices").style.display = "none";
-  document.getElementById("question-text").style.display = "none";
+  playSound('win');
+  triggerConfetti();
+
+  // Hide game elements
   document.getElementById("level-title").style.display = "none";
-  document.getElementById("orb").style.display = "none";
+  document.getElementById("question-text").style.display = "none";
+  document.getElementById("choices").style.display = "none";
+  document.getElementById("progress-wrapper").style.display = "none";
+  document.getElementById("orb").style.display = "none"; // Hide orb to focus on chart
 
-  const finalTitle = document.getElementById("final-title");
-  const finalSummary = document.getElementById("final-summary");
+  // Show final screen
+  const finalScreen = document.getElementById("final-screen");
+  finalScreen.style.display = "block";
 
-  let mindsetLabel = "In Progress";
-  const totalMindset = attributes.mindset + attributes.focus + attributes.consistency + attributes.patience;
+  // Generate Summary Text based on scores
+  const summaryEl = document.getElementById("final-summary");
+  let summaryHTML = "";
+  
+  // Archetype logic
+  if (attributes.mindset > 15 && attributes.consistency > 10) {
+    summaryHTML = `<strong>The Architect.</strong><br>You have built a rock-solid foundation. Your mindset is your greatest asset, and your consistency ensures you will reach your goals.`;
+  } else if (attributes.risk > 10 && attributes.trajectory > 10) {
+    summaryHTML = `<strong>The Visionary.</strong><br>You are willing to take calculated risks and have your eyes on the big picture. Watch your patience, but trust your gut.`;
+  } else if (attributes.focus < 5 || attributes.consistency < 5) {
+    summaryHTML = `<strong>The Dreamer.</strong><br>You have great potential, but your habits aren't supporting your dreams yet. Focus on small, daily consistencies to level up.`;
+  } else {
+    summaryHTML = `<strong>The Apprentice.</strong><br>You are on the path. You made some good choices and some learning mistakes. Keep refining your daily habits.`;
+  }
+  
+  summaryEl.innerHTML = summaryHTML;
 
-  if (totalMindset >= 40) mindsetLabel = "Wealth Architect";
-  else if (totalMindset >= 30) mindsetLabel = "Future Builder";
-  else if (totalMindset >= 20) mindsetLabel = "Intentional Learner";
-  else mindsetLabel = "Just Getting Started";
+  // Render Chart.js
+  renderChart();
+}
 
-  finalTitle.innerHTML = `Profile: <span style="color:var(--gold)">${mindsetLabel}</span>`;
-
-  const summaryText = `
-    Your choices have shaped your trajectory. <br>
-    <strong>Consistency</strong> and <strong>Mindset</strong> are your compounding engines.<br><br>
-    See how your attributes balance out in the chart above.
-  `;
-
-  finalSummary.innerHTML = summaryText;
-  document.getElementById("final-screen").style.display = "block";
-
-  // -----------------------
-  // INITIALIZE CHART.JS
-  // -----------------------
+function renderChart() {
   const ctx = document.getElementById('statsChart').getContext('2d');
   
-  // Data for chart
-  const dataValues = [
-    attributes.focus, 
-    attributes.patience, 
-    attributes.consistency, 
-    attributes.mindset, 
-    attributes.risk, 
-    attributes.trajectory
-  ];
+  // Prepare data
+  const labels = Object.keys(attributes).map(k => k.charAt(0).toUpperCase() + k.slice(1));
+  const dataValues = Object.values(attributes);
 
-  // Ensure no negative values break the chart visual (optional, but radar charts hate negatives)
-  // We map negative values to 0 for visual cleanliness, or keep them if we want to show flaws.
-  // Let's just offset them by adding +10 to everything for the visual scale, or just raw.
-  // Let's use raw but set a min suggestion.
-
+  // Chart Configuration
   new Chart(ctx, {
     type: 'radar',
     data: {
-      labels: ['Focus', 'Patience', 'Consistency', 'Mindset', 'Risk', 'Trajectory'],
+      labels: labels,
       datasets: [{
-        label: 'Your Stats',
+        label: 'Mindset Score',
         data: dataValues,
-        backgroundColor: 'rgba(34, 230, 166, 0.25)', /* Teal transparent */
-        borderColor: '#22e6a6',
-        pointBackgroundColor: '#facc15', /* Gold points */
+        backgroundColor: 'rgba(34, 230, 166, 0.2)', // Teal with opacity
+        borderColor: '#22e6a6', // Solid Teal
+        pointBackgroundColor: '#38bdf8', // Blue dots
         pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: '#38bdf8',
         borderWidth: 2
       }]
     },
@@ -1065,24 +1206,23 @@ function endGame() {
       scales: {
         r: {
           angleLines: {
-            color: 'rgba(255, 255, 255, 0.1)'
+            color: 'rgba(148, 163, 184, 0.2)'
           },
           grid: {
-            color: 'rgba(255, 255, 255, 0.1)'
+            color: 'rgba(148, 163, 184, 0.2)'
           },
           pointLabels: {
-            color: '#e5e7eb',
+            color: '#e5e7eb', // Text color
             font: {
-              family: "'Montserrat', sans-serif",
-              size: 12
+              family: 'Montserrat',
+              size: 11,
+              weight: '600'
             }
           },
           ticks: {
-            display: false, // hide the numbers on the scale lines
+            display: false,
             backdropColor: 'transparent'
-          },
-          suggestedMin: 0,
-          suggestedMax: 15
+          }
         }
       },
       plugins: {
@@ -1093,24 +1233,6 @@ function endGame() {
     }
   });
 }
-
-/* ---------------------------------------------------------
-   INTRO START
---------------------------------------------------------- */
-function startGameFromIntro() {
-  const intro = document.getElementById("intro-overlay");
-  intro.classList.add("fade-out");
-
-  // Initialize progress label
-  answeredCount = 0;
-  updateProgress();
-
-  setTimeout(() => {
-    intro.style.display = "none";
-    renderQuestion();
-  }, 700);
-}
 </script>
-
 </body>
 </html>
