@@ -323,7 +323,7 @@ body {
     max-width: 420px;
     display: block;
     margin: 0 auto;
-    transition: transform 0.1s ease, box-shadow 0.2s ease, opacity 0.3s, border 0.3s; /* Added border to transition */
+    transition: transform 0.1s ease, box-shadow 0.2s ease, opacity 0.3s, border 0.3s;
 }
 /* Hover Effect */
 .button:hover:not(.disabled) {
@@ -579,17 +579,14 @@ body {
 
 <script>
 /* ---------------------------------------------------------
-    AUDIO CONFIGURATION
+    AUDIO CONFIGURATION (Optimized for GitHub Pages)
 --------------------------------------------------------- */
+// Since your site is hosted on GitHub Pages, the relative path 
+// 'sounds/filename.mp3' will resolve correctly.
 const audioClick = new Audio('sounds/click.mp3'); 
 const audioGood  = new Audio('sounds/good.mp3');   
 const audioBad   = new Audio('sounds/bad.mp3');   
 const audioWin   = new Audio('sounds/win.mp3');   
-
-audioClick.load();
-audioGood.load();
-audioBad.load();
-audioWin.load();
 
 // Volume Settings
 audioClick.volume = 0.3;
@@ -598,10 +595,12 @@ audioBad.volume = 0.4;
 audioWin.volume = 0.5;
 
 function playSound(type) {
-    if (type === 'click') audioClick.cloneNode(true).play().catch(e=>{});
-    if (type === 'good')  audioGood.cloneNode(true).play().catch(e=>{});
-    if (type === 'bad')   audioBad.cloneNode(true).play().catch(e=>{});
-    if (type === 'win')   audioWin.cloneNode(true).play().catch(e=>{});
+  // Using cloneNode(true) allows rapid clicks/effects to overlap
+  // The .catch(e=>{}) handles the browser security policy preventing autoplay on first click.
+  if (type === 'click') audioClick.cloneNode(true).play().catch(e=>{});
+  if (type === 'good')  audioGood.cloneNode(true).play().catch(e=>{});
+  if (type === 'bad')   audioBad.cloneNode(true).play().catch(e=>{});
+  if (type === 'win')   audioWin.cloneNode(true).play().catch(e=>{});
 }
 
 /* ---------------------------------------------------------
@@ -1135,7 +1134,7 @@ function spawnFloatingText(text, type) {
 }
 
 /* ---------------------------------------------------------
-    HANDLE CHOICE (FIXED: Removed 'correct'/'incorrect' visual highlight)
+    HANDLE CHOICE
 --------------------------------------------------------- */
 function selectChoice(index) {
     const level = levels[currentLevel];
@@ -1144,6 +1143,9 @@ function selectChoice(index) {
     const orb = document.getElementById("orb");
     const allButtons = document.querySelectorAll('.button');
     const clickedButton = allButtons[index];
+    
+    // Play the button click sound immediately
+    playSound('click'); 
 
     // Disable all buttons immediately
     allButtons.forEach(btn => {
