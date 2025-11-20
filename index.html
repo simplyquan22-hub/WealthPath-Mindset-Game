@@ -5,8 +5,9 @@
 <title>WealthPath — The Mindset Game</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 /* ---------------------------------------------------------
@@ -17,6 +18,7 @@
   --blue: #38bdf8;
   --teal: #22e6a6;
   --gold: #facc15;
+  --red: #f87171;
 
   --text: #e5e7eb;
   --muted: #94a3b8;
@@ -187,12 +189,45 @@ body {
   box-shadow: 0 0 25px var(--blue), 0 0 50px var(--blue);
   transition: all 0.4s ease;
   animation: orbPulse 4s ease-in-out infinite;
+  position: relative; /* Anchor for particles/text if needed */
 }
 @keyframes orbPulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.03); }
   100% { transform: scale(1); }
 }
+
+/* ---------------------------------------------------------
+   FLOATING TEXT FEEDBACK
+--------------------------------------------------------- */
+.floating-text {
+  position: fixed;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  pointer-events: none;
+  z-index: 100;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  animation: floatUpFade 1.5s ease-out forwards;
+}
+
+@keyframes floatUpFade {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.8);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px) scale(1);
+  }
+}
+
+.ft-pos { color: var(--teal); }
+.ft-neg { color: var(--red); }
 
 /* ---------------------------------------------------------
    LEVEL HEADER & QUESTION TEXT
@@ -212,13 +247,12 @@ body {
 }
 
 /* ---------------------------------------------------------
-   CHOICE BUTTONS (NEW UIVERSE DESIGN)
+   CHOICE BUTTONS
 --------------------------------------------------------- */
 .choice-btn {
   margin-bottom: 16px;
 }
 
-/* From Uiverse.io by Spacious74 */
 .button {
   cursor: pointer;
   font-size: 1rem;
@@ -251,16 +285,10 @@ body {
   border-radius: 16px;
   bottom: 0;
   left: 0;
-  background: radial-gradient(
-    circle 60px at 0% 100%,
-    #3fe9ff,
-    #0000ff80,
-    transparent
-  );
+  background: radial-gradient(circle 60px at 0% 100%, #3fe9ff, #0000ff80, transparent);
   box-shadow: -10px 10px 30px #0051ff2d;
 }
 
-/* Add styling for blob2 so it doesn't just sit invisible */
 .blob2 {
   position: absolute;
   width: 60px;
@@ -268,11 +296,7 @@ body {
   border-radius: 16px;
   top: -8px;
   right: 6%;
-  background: radial-gradient(
-    circle 40px at 100% 0%,
-    #ffffff30,
-    transparent
-  );
+  background: radial-gradient(circle 40px at 100% 0%, #ffffff30, transparent);
   pointer-events: none;
 }
 
@@ -295,12 +319,7 @@ body {
   left: 0;
   top: 0;
   border-radius: 14px;
-  background: radial-gradient(
-    circle 60px at 0% 100%,
-    #00e1ff1a,
-    #0000ff11,
-    transparent
-  );
+  background: radial-gradient(circle 60px at 0% 100%, #00e1ff1a, #0000ff11, transparent);
   position: absolute;
 }
 
@@ -339,31 +358,36 @@ body {
 }
 
 @keyframes levelPop {
-  0% {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  25% {
-    opacity: 1;
-    transform: translateY(0) scale(1.02);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-10px) scale(1);
-  }
+  0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+  25% { opacity: 1; transform: translateY(0) scale(1.02); }
+  100% { opacity: 0; transform: translateY(-10px) scale(1); }
 }
 
 /* ---------------------------------------------------------
-   FINAL SCREEN
+   FINAL SCREEN & CHART
 --------------------------------------------------------- */
 #final-screen {
   display: none;
   margin-top: 24px;
+  animation: fadeInFinal 1s ease forwards;
 }
+@keyframes fadeInFinal {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 #final-title {
   font-family: "Montserrat", sans-serif;
   font-size: 1.7rem;
   margin-bottom: 16px;
+  color: var(--blue);
+}
+#chart-container {
+  position: relative;
+  height: 300px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 30px auto;
 }
 #final-summary {
   font-size: 1rem;
@@ -376,7 +400,6 @@ body {
 
 <body>
 
-<!-- INTRO CINEMATIC -->
 <div id="intro-overlay">
   <div id="intro-card">
     <div id="intro-logo"></div>
@@ -396,20 +419,16 @@ body {
   </div>
 </div>
 
-<!-- PARTICLE BACKGROUND -->
 <div id="particles"></div>
 
-<!-- LEVEL TRANSITION -->
 <div id="level-transition">
   <div id="level-transition-inner"></div>
 </div>
 
-<!-- GAME CONTAINER -->
 <div id="game-container">
 
-  <h1 id="game-title">WealthPath — The Mindset Game</h1>
+  <h1 id="game-title">WealthPath</h1>
 
-  <!-- Progress -->
   <div id="progress-wrapper">
     <div id="progress-label">Question 0 of 0</div>
     <div id="progress-bar">
@@ -424,10 +443,21 @@ body {
 
   <div id="choices"></div>
 
-  <!-- FINAL SCREEN -->
   <div id="final-screen">
-    <div id="final-title">Your WealthPath Summary</div>
+    <div id="final-title">Your Mindset Profile</div>
+    
+    <div id="chart-container">
+      <canvas id="statsChart"></canvas>
+    </div>
+
     <div id="final-summary"></div>
+    
+    <div class="choice-btn" style="margin-top: 20px;">
+      <button class="button" onclick="location.reload()">
+        <div class="blob1"></div>
+        <div class="inner">Play Again</div>
+      </button>
+    </div>
   </div>
 
 </div>
@@ -456,6 +486,7 @@ spawnParticles();
 let orbSize = 120;
 let orbStage = 0; // 0 = blue, 1 = teal, 2 = gold
 
+// Initial Attributes
 let attributes = {
   focus: 0,
   patience: 0,
@@ -804,7 +835,7 @@ levels.forEach(level => {
    UPDATE ORB EVOLUTION
 --------------------------------------------------------- */
 function evolveOrb() {
-  orbSize += 6; // smaller growth per question since there are many
+  orbSize += 6; 
   const orb = document.getElementById("orb");
   orb.style.width = orbSize + "px";
   orb.style.height = orbSize + "px";
@@ -886,6 +917,32 @@ function showLevelTransition(nextTitle) {
 }
 
 /* ---------------------------------------------------------
+   SPAWN FLOATING TEXT (NEW)
+--------------------------------------------------------- */
+function spawnFloatingText(text, type) {
+  const el = document.createElement("div");
+  el.classList.add("floating-text", type);
+  el.innerText = text;
+
+  // Position over the orb
+  const orb = document.getElementById("orb");
+  const rect = orb.getBoundingClientRect();
+  
+  // Random offset so they don't stack perfectly on top of each other
+  const randX = Math.random() * 40 - 20; 
+
+  el.style.left = (rect.left + rect.width/2 - 30 + randX) + "px";
+  el.style.top = (rect.top + rect.height/2 - 20) + "px";
+
+  document.body.appendChild(el);
+  
+  // Remove after animation
+  setTimeout(() => {
+    el.remove();
+  }, 1500);
+}
+
+/* ---------------------------------------------------------
    HANDLE CHOICE
 --------------------------------------------------------- */
 function selectChoice(index) {
@@ -893,9 +950,21 @@ function selectChoice(index) {
   const question = level.questions[currentQuestion];
   const choice = question.choices[index];
 
-  // Apply attribute effects
+  // Apply attribute effects & Spawn Text
+  let delay = 0;
   for (let key in choice.effects) {
     attributes[key] += choice.effects[key];
+    
+    const val = choice.effects[key];
+    const sign = val > 0 ? "+" : "";
+    const label = key.charAt(0).toUpperCase() + key.slice(1);
+    const textClass = val >= 0 ? "ft-pos" : "ft-neg";
+
+    // Spawn visual feedback
+    setTimeout(() => {
+      spawnFloatingText(`${sign}${val} ${label}`, textClass);
+    }, delay);
+    delay += 300; // stagger the text
   }
 
   // Increase answered count + progress
@@ -926,14 +995,16 @@ function selectChoice(index) {
 }
 
 /* ---------------------------------------------------------
-   END GAME
+   END GAME & RENDER CHART
 --------------------------------------------------------- */
 function endGame() {
   document.getElementById("choices").style.display = "none";
   document.getElementById("question-text").style.display = "none";
   document.getElementById("level-title").style.display = "none";
+  document.getElementById("orb").style.display = "none";
 
-  const final = document.getElementById("final-summary");
+  const finalTitle = document.getElementById("final-title");
+  const finalSummary = document.getElementById("final-summary");
 
   let mindsetLabel = "In Progress";
   const totalMindset = attributes.mindset + attributes.focus + attributes.consistency + attributes.patience;
@@ -943,23 +1014,84 @@ function endGame() {
   else if (totalMindset >= 20) mindsetLabel = "Intentional Learner";
   else mindsetLabel = "Just Getting Started";
 
-  const summary = `
-    <strong>Focus:</strong> ${attributes.focus}<br>
-    <strong>Patience:</strong> ${attributes.patience}<br>
-    <strong>Consistency:</strong> ${attributes.consistency}<br>
-    <strong>Mindset Strength:</strong> ${attributes.mindset}<br>
-    <strong>Risk Comfort:</strong> ${attributes.risk}<br>
-    <strong>Wealth Trajectory:</strong> ${attributes.trajectory}<br><br>
+  finalTitle.innerHTML = `Profile: <span style="color:var(--gold)">${mindsetLabel}</span>`;
 
-    Your mindset profile: <strong>${mindsetLabel}</strong><br><br>
-    Your answers weren’t about being perfect—they were about being honest.<br>
-    Every question you faced is a moment you’ll see again in real life.<br><br>
-    <strong>Your choices are already compounding.</strong><br>
-    This is WealthPath.
+  const summaryText = `
+    Your choices have shaped your trajectory. <br>
+    <strong>Consistency</strong> and <strong>Mindset</strong> are your compounding engines.<br><br>
+    See how your attributes balance out in the chart above.
   `;
 
-  final.innerHTML = summary;
+  finalSummary.innerHTML = summaryText;
   document.getElementById("final-screen").style.display = "block";
+
+  // -----------------------
+  // INITIALIZE CHART.JS
+  // -----------------------
+  const ctx = document.getElementById('statsChart').getContext('2d');
+  
+  // Data for chart
+  const dataValues = [
+    attributes.focus, 
+    attributes.patience, 
+    attributes.consistency, 
+    attributes.mindset, 
+    attributes.risk, 
+    attributes.trajectory
+  ];
+
+  // Ensure no negative values break the chart visual (optional, but radar charts hate negatives)
+  // We map negative values to 0 for visual cleanliness, or keep them if we want to show flaws.
+  // Let's just offset them by adding +10 to everything for the visual scale, or just raw.
+  // Let's use raw but set a min suggestion.
+
+  new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['Focus', 'Patience', 'Consistency', 'Mindset', 'Risk', 'Trajectory'],
+      datasets: [{
+        label: 'Your Stats',
+        data: dataValues,
+        backgroundColor: 'rgba(34, 230, 166, 0.25)', /* Teal transparent */
+        borderColor: '#22e6a6',
+        pointBackgroundColor: '#facc15', /* Gold points */
+        pointBorderColor: '#fff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          angleLines: {
+            color: 'rgba(255, 255, 255, 0.1)'
+          },
+          grid: {
+            color: 'rgba(255, 255, 255, 0.1)'
+          },
+          pointLabels: {
+            color: '#e5e7eb',
+            font: {
+              family: "'Montserrat', sans-serif",
+              size: 12
+            }
+          },
+          ticks: {
+            display: false, // hide the numbers on the scale lines
+            backdropColor: 'transparent'
+          },
+          suggestedMin: 0,
+          suggestedMax: 15
+        }
+      },
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
+    }
+  });
 }
 
 /* ---------------------------------------------------------
