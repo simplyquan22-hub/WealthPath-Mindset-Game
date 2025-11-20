@@ -47,7 +47,7 @@ body {
 --------------------------------------------------------- */
 @keyframes shake {
     0% { transform: translate(1px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    10% { transform: translate(-1px, 2px) rotate(-1deg); }
     20% { transform: translate(-3px, 0px) rotate(1deg); }
     30% { transform: translate(3px, 2px) rotate(0deg); }
     40% { transform: translate(1px, -1px) rotate(1deg); }
@@ -210,7 +210,6 @@ body {
 
 /* ---------------------------------------------------------
     ORB DESIGN
-    USING CLASSES FOR STAGES (IMPROVEMENT)
 --------------------------------------------------------- */
 #orb {
     width: 120px;
@@ -227,7 +226,7 @@ body {
     100% { transform: scale(1); }
 }
 
-/* Orb Stage Colors (IMPROVEMENT: CSS Defined) */
+/* Orb Stage Colors */
 #orb.stage-0 {
     background: radial-gradient(circle at center, var(--blue), #0ea5e9, #0369a1 70%);
     box-shadow: 0 0 25px var(--blue), 0 0 50px var(--blue);
@@ -241,7 +240,7 @@ body {
     box-shadow: 0 0 35px var(--gold), 0 0 70px var(--gold);
 }
 
-/* Orb Flash on Good Answer (IMPROVEMENT) */
+/* Orb Flash on Good Answer */
 .orb-good-flash {
     animation: goodFlash 0.3s ease;
 }
@@ -324,9 +323,9 @@ body {
     max-width: 420px;
     display: block;
     margin: 0 auto;
-    transition: transform 0.1s ease, box-shadow 0.2s ease, opacity 0.3s;
+    transition: transform 0.1s ease, box-shadow 0.2s ease, opacity 0.3s, border 0.3s; /* Added border to transition */
 }
-/* IMPROVEMENT: Hover Effect */
+/* Hover Effect */
 .button:hover:not(.disabled) {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(56, 189, 248, 0.15);
@@ -334,9 +333,11 @@ body {
 .button:active:not(.disabled) {
     transform: scale(0.98);
 }
-/* DISABLE STATE */
+/* DISABLE STATE - IMPORTANT: The logic below removes the need for .correct/.incorrect */
 .button.disabled {
     pointer-events: none; 
+    /* For non-selected buttons when one is clicked */
+    opacity: 0.5; 
 }
 
 
@@ -395,24 +396,6 @@ body {
     border-radius: 14px;
     background: radial-gradient(circle 60px at 0% 100%, #00e1ff1a, #0000ff11, transparent);
     position: absolute;
-}
-
-/* BUTTON FEEDBACK STATES (IMPROVEMENT) */
-.button.correct {
-    border: 2px solid var(--teal); 
-    box-shadow: 0 0 15px var(--teal);
-    opacity: 1 !important;
-    transform: scale(1.02);
-}
-.button.incorrect {
-    border: 2px solid var(--red);
-    box-shadow: 0 0 15px var(--red);
-    opacity: 1 !important;
-    transform: scale(1.02);
-}
-/* For non-selected buttons when one is clicked */
-.button.disabled:not(.correct):not(.incorrect) {
-    opacity: 0.5;
 }
 
 
@@ -477,16 +460,50 @@ body {
 }
 #chart-container {
     position: relative;
-    height: 350px; /* Increased height for Radar */
+    height: 350px; 
     width: 100%;
     max-width: 500px;
     margin: 0 auto 30px auto;
 }
+
+#summary-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+}
+
 #final-summary {
     font-size: 1rem;
-    margin-bottom: 30px;
     color: var(--muted);
     line-height: 1.6;
+    max-width: 400px;
+}
+#final-summary strong {
+    color: var(--text);
+}
+
+
+#final-scores { /* List for raw scores */
+    width: 100%;
+    max-width: 300px;
+    list-style: none;
+    padding: 10px 0;
+    border-top: 1px dashed rgba(148, 163, 184, 0.2);
+    border-bottom: 1px dashed rgba(148, 163, 184, 0.2);
+    text-align: left;
+}
+#final-scores li {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 12px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+#final-scores .score-val {
+    color: var(--teal);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
 }
 </style>
 </head>
@@ -529,7 +546,9 @@ body {
         </div>
     </div>
 
-    <div id="orb" class="stage-0"></div> <div id="level-title"></div>
+    <div id="orb" class="stage-0"></div>
+
+    <div id="level-title"></div>
     <div id="question-text"></div>
 
     <div id="choices"></div>
@@ -541,8 +560,13 @@ body {
             <canvas id="statsChart"></canvas>
         </div>
 
-        <div id="final-summary"></div>
+        <div id="summary-wrapper">
+            <div id="final-summary"></div>
+            <ul id="final-scores"></ul>
+        </div>
         
+        <div id="final-next-step" style="margin-top: 20px; color: var(--blue); font-weight: 600;"></div>
+
         <div class="choice-btn" style="margin-top: 20px;">
             <button class="button" onclick="location.reload()">
                 <div class="blob1"></div>
@@ -555,14 +579,13 @@ body {
 
 <script>
 /* ---------------------------------------------------------
-    AUDIO CONFIGURATION (FIX: Preloading added)
+    AUDIO CONFIGURATION
 --------------------------------------------------------- */
 const audioClick = new Audio('sounds/click.mp3'); 
 const audioGood  = new Audio('sounds/good.mp3');   
 const audioBad   = new Audio('sounds/bad.mp3');   
 const audioWin   = new Audio('sounds/win.mp3');   
 
-// FIX: Preload audio files to eliminate delay
 audioClick.load();
 audioGood.load();
 audioBad.load();
@@ -575,7 +598,6 @@ audioBad.volume = 0.4;
 audioWin.volume = 0.5;
 
 function playSound(type) {
-    // Using cloneNode(true) allows rapid clicks/effects to overlap
     if (type === 'click') audioClick.cloneNode(true).play().catch(e=>{});
     if (type === 'good')  audioGood.cloneNode(true).play().catch(e=>{});
     if (type === 'bad')   audioBad.cloneNode(true).play().catch(e=>{});
@@ -587,8 +609,8 @@ function playSound(type) {
 --------------------------------------------------------- */
 function triggerShake() {
     const container = document.getElementById('game-container');
-    container.classList.remove('shake-anim'); // reset
-    void container.offsetWidth; // trigger reflow
+    container.classList.remove('shake-anim'); 
+    void container.offsetWidth; 
     container.classList.add('shake-anim');
     
     setTimeout(() => {
@@ -606,7 +628,6 @@ function triggerConfetti() {
         const conf = document.createElement("div");
         conf.classList.add("confetti-piece");
         
-        // Random colors
         const colors = ['#facc15', '#38bdf8', '#22e6a6', '#ffffff'];
         conf.style.background = colors[Math.floor(Math.random()*colors.length)];
         
@@ -614,13 +635,11 @@ function triggerConfetti() {
         conf.style.top = centerY + 'px';
         document.body.appendChild(conf);
 
-        // Random direction
         const angle = Math.random() * Math.PI * 2;
         const velocity = 100 + Math.random() * 200;
         const tx = Math.cos(angle) * velocity;
         const ty = Math.sin(angle) * velocity;
 
-        // Animate
         conf.animate([
             { transform: `translate(0,0) scale(1)`, opacity: 1 },
             { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
@@ -665,7 +684,7 @@ let attributes = {
 };
 
 const levels = [
-    // ... (Your level data remains here, omitted for brevity) ...
+    // --- START LEVEL 1 DATA ---
     {
         title: "Level 1 — Daily Focus",
         questions: [
@@ -719,7 +738,7 @@ const levels = [
             }
         ]
     },
-
+    // --- START LEVEL 2 DATA ---
     {
         title: "Level 2 — Spending & Temptation",
         questions: [
@@ -773,7 +792,7 @@ const levels = [
             }
         ]
     },
-
+    // --- START LEVEL 3 DATA ---
     {
         title: "Level 3 — Emotions & The Market",
         questions: [
@@ -827,7 +846,7 @@ const levels = [
             }
         ]
     },
-
+    // --- START LEVEL 4 DATA ---
     {
         title: "Level 4 — Habits & Automation",
         questions: [
@@ -881,7 +900,7 @@ const levels = [
             }
         ]
     },
-
+    // --- START LEVEL 5 DATA ---
     {
         title: "Level 5 — Risk & Goals",
         questions: [
@@ -935,7 +954,7 @@ const levels = [
             }
         ]
     },
-
+    // --- START LEVEL 6 DATA ---
     {
         title: "Level 6 — Life Design & Identity",
         questions: [
@@ -1001,7 +1020,7 @@ levels.forEach(level => {
 });
 
 /* ---------------------------------------------------------
-    UPDATE ORB EVOLUTION (IMPROVED: Uses classes, removed inline styles)
+    UPDATE ORB EVOLUTION
 --------------------------------------------------------- */
 function evolveOrb() {
     orbSize += 6;    
@@ -1015,7 +1034,6 @@ function evolveOrb() {
         orb.classList.remove('stage-0');
         orb.classList.add('stage-1');
         
-        // Sound + Visual FX for level up
         playSound('win');
         triggerConfetti();
     }
@@ -1025,7 +1043,6 @@ function evolveOrb() {
         orb.classList.remove('stage-1');
         orb.classList.add('stage-2');
 
-        // Sound + Visual FX for level up
         playSound('win');
         triggerConfetti();
     }
@@ -1064,9 +1081,8 @@ function renderQuestion() {
         const btn = document.createElement("div");
         btn.classList.add("choice-btn");
 
-        // Removed onmouseenter sound to prevent noise from rapid mouse movement
         btn.innerHTML = `
-            <button class="button" onclick="selectChoice(${i})">
+            <button class="button" onclick="selectChoice(${i})" style="border: 2px solid transparent;">
                 <div class="blob1"></div>
                 <div class="blob2"></div>
                 <div class="inner">${choice.label}</div>
@@ -1119,7 +1135,7 @@ function spawnFloatingText(text, type) {
 }
 
 /* ---------------------------------------------------------
-    HANDLE CHOICE (FIXED: Orb logic and flow control)
+    HANDLE CHOICE (FIXED: Removed 'correct'/'incorrect' visual highlight)
 --------------------------------------------------------- */
 function selectChoice(index) {
     const level = levels[currentLevel];
@@ -1129,10 +1145,16 @@ function selectChoice(index) {
     const allButtons = document.querySelectorAll('.button');
     const clickedButton = allButtons[index];
 
-    // IMPROVEMENT: Disable all buttons immediately to prevent double-click issues
+    // Disable all buttons immediately
     allButtons.forEach(btn => {
         btn.onclick = null; // Remove the onclick handler
         btn.classList.add('disabled'); // Add the disabled class
+        // Apply a neutral focus effect to the selected button
+        if (btn === clickedButton) {
+            btn.style.border = '2px solid rgba(148, 163, 184, 0.4)'; 
+            btn.style.boxShadow = '0 0 10px rgba(148, 163, 184, 0.1)';
+            btn.style.opacity = '1';
+        }
     });
 
     // Determine net score, apply attributes, and spawn floating text
@@ -1157,14 +1179,12 @@ function selectChoice(index) {
 
     const transitionDelay = 250 + delay; // Total delay needed for feedback animations
 
-    // AUDIO, SHAKE, ORB FLASH & BUTTON FEEDBACK TRIGGER
-    if (netScore < 0) {
+    // Sound, Shake, and Orb Flash trigger based on net score
+    if (netScore <= 0) {
         playSound('bad');
         triggerShake();
-        clickedButton.classList.add('incorrect');
-    } else {
+    } else { // netScore > 0
         playSound('good');
-        clickedButton.classList.add('correct');
         // Orb flash on good choice
         orb.classList.add('orb-good-flash'); 
         setTimeout(() => {
@@ -1172,7 +1192,7 @@ function selectChoice(index) {
         }, 300);
     }
 
-    // FIX: Only evolve orb if the choice had a net positive score
+    // Only evolve orb if the choice had a net positive score
     if (netScore > 0) {
         evolveOrb();
     }
@@ -1228,31 +1248,75 @@ function endGame() {
     document.getElementById("question-text").style.display = "none";
     document.getElementById("choices").style.display = "none";
     document.getElementById("progress-wrapper").style.display = "none";
-    document.getElementById("orb").style.display = "none"; // Hide orb to focus on chart
+    document.getElementById("orb").style.display = "none"; 
 
     // Show final screen
     const finalScreen = document.getElementById("final-screen");
     finalScreen.style.display = "block";
 
-    // Generate Summary Text based on scores
+    // 1. Render Chart.js
+    renderChart();
+
+    // 2. Generate Summary Text based on scores (Archetype logic with subtitles)
     const summaryEl = document.getElementById("final-summary");
+    const nextStepEl = document.getElementById("final-next-step");
+    const scoresListEl = document.getElementById("final-scores");
+
     let summaryHTML = "";
-    
+    let archetypeTitle;
+    let archetypeSubtitle;
+    let minScore = Infinity;
+    let weakestAttribute = '';
+    let scoresHTML = "";
+
     // Archetype logic
     if (attributes.mindset > 15 && attributes.consistency > 10) {
-        summaryHTML = `<strong>The Architect.</strong><br>You have built a rock-solid foundation. Your mindset is your greatest asset, and your consistency ensures you will reach your goals.`;
+        archetypeTitle = `<strong>The Architect.</strong>`;
+        archetypeSubtitle = `Master of Habits.`;
+        summaryHTML = `You have built a rock-solid foundation. Your mindset is your greatest asset, and your consistency ensures you will reach your goals.`;
     } else if (attributes.risk > 10 && attributes.trajectory > 10) {
-        summaryHTML = `<strong>The Visionary.</strong><br>You are willing to take calculated risks and have your eyes on the big picture. Watch your patience, but trust your gut.`;
+        archetypeTitle = `<strong>The Visionary.</strong>`;
+        archetypeSubtitle = `The Calculated Builder.`;
+        summaryHTML = `You are willing to take calculated risks and have your eyes on the big picture. Watch your patience, but trust your gut.`;
     } else if (attributes.focus < 5 || attributes.consistency < 5) {
-        summaryHTML = `<strong>The Dreamer.</strong><br>You have great potential, but your habits aren't supporting your dreams yet. Focus on small, daily consistencies to level up.`;
+        archetypeTitle = `<strong>The Dreamer.</strong>`;
+        archetypeSubtitle = `Awaiting Action.`;
+        summaryHTML = `You have great potential, but your habits aren't supporting your dreams yet. Focus on small, daily consistencies to level up.`;
     } else {
-        summaryHTML = `<strong>The Apprentice.</strong><br>You are on the path. You made some good choices and some learning mistakes. Keep refining your daily habits.`;
+        archetypeTitle = `<strong>The Apprentice.</strong>`;
+        archetypeSubtitle = `The Committed Learner.`;
+        summaryHTML = `You are on the path. You made some good choices and some learning mistakes. Keep refining your daily habits.`;
     }
     
-    summaryEl.innerHTML = summaryHTML;
+    summaryEl.innerHTML = `${archetypeTitle}<br><span style="color: var(--teal); font-weight: 700;">${archetypeSubtitle}</span><br><br>${summaryHTML}`;
 
-    // Render Chart.js
-    renderChart();
+    // 3. Render Raw Score Values and determine weakest attribute
+    for (const [key, value] of Object.entries(attributes)) {
+        const label = key.charAt(0).toUpperCase() + key.slice(1);
+        scoresHTML += `<li>${label}<span class="score-val">${value}</span></li>`;
+
+        // Track weakest attribute for next step
+        if (value < minScore) {
+            minScore = value;
+            weakestAttribute = label;
+        }
+    }
+    scoresListEl.innerHTML = scoresHTML;
+
+    // 4. Actionable Next Step (Based on the lowest score)
+    if (weakestAttribute === 'Focus') {
+        nextStepEl.innerHTML = `🎯 **Your next step:** To enhance your ${weakestAttribute}, try eliminating one distraction (like notifications) for 30 minutes every day.`;
+    } else if (weakestAttribute === 'Consistency') {
+        nextStepEl.innerHTML = `🔁 **Your next step:** To build ${weakestAttribute}, make your commitment so small you can't say no. Do 5 minutes of focused work daily.`;
+    } else if (weakestAttribute === 'Patience') {
+        nextStepEl.innerHTML = `⏳ **Your next step:** To improve ${weakestAttribute}, institute a 48-hour delay before making any non-essential purchase.`;
+    } else if (weakestAttribute === 'Mindset') {
+        nextStepEl.innerHTML = `🧠 **Your next step:** To strengthen your ${weakestAttribute}, journal one financial victory (big or small) every week to build confidence.`;
+    } else if (weakestAttribute === 'Risk') {
+        nextStepEl.innerHTML = `⚖️ **Your next step:** To manage ${weakestAttribute}, research one low-risk, diversified investment strategy (like an index fund) this week.`;
+    } else if (weakestAttribute === 'Trajectory') {
+        nextStepEl.innerHTML = `🔭 **Your next step:** To clarify your ${weakestAttribute}, write down three concrete, measurable goals for the next 12 months.`;
+    }
 }
 
 function renderChart() {
@@ -1303,7 +1367,7 @@ function renderChart() {
                         backdropColor: 'transparent'
                     },
                     suggestedMin: 0, 
-                    suggestedMax: 25 // IMPROVEMENT: Set max for consistent scale
+                    suggestedMax: 25 // Set max for consistent scale
                 }
             },
             plugins: {
