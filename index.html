@@ -1,1962 +1,984 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>WealthPath — Mindset Journey Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Montserrat:wght@600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #020617;
-      --bg2: #020617;
-      --card-bg: rgba(15, 23, 42, 0.9);
-      --border: rgba(148, 163, 184, 0.4);
-      --text: #e5e7eb;
-      --muted: #94a3b8;
-      --accent: #38bdf8;
-      --gold: #facc15;
-    }
+<meta charset="UTF-8" />
+<title>WealthPath — The Mindset Game</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet" />
 
-    body {
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at top, rgba(56, 189, 248, 0.2) 0, transparent 55%),
-        radial-gradient(circle at bottom, rgba(250, 204, 21, 0.15) 0, transparent 55%),
-        #020617;
-      color: var(--text);
-      -webkit-tap-highlight-color: transparent;
-    }
+<style>
+/* ---------------------------------------------------------
+   ROOT BRANDING COLORS
+--------------------------------------------------------- */
+:root {
+  --bg: #020617;
+  --blue: #38bdf8;
+  --teal: #22e6a6;
+  --gold: #facc15;
 
-    .bg-particles {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background-image:
-        radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.12) 0, transparent 55%),
-        radial-gradient(circle at 90% 10%, rgba(56, 189, 248, 0.08) 0, transparent 55%),
-        radial-gradient(circle at 50% 100%, rgba(250, 204, 21, 0.12) 0, transparent 60%);
-      opacity: 0.9;
-      z-index: 0;
-    }
-
-    .page-shell {
-      position: relative;
-      z-index: 1;
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 0px 16px 32px;
-    }
-
-    @media (min-width: 768px) {
-      .page-shell {
-        padding: 20px 24px 40px;
-      }
-    }
-
-    /* HEADER */
-
-    .wp-header-wrap {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      padding-bottom: 12px;
-      backdrop-filter: blur(16px);
-    }
-
-    .wp-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: linear-gradient(
-        135deg,
-        rgba(15, 23, 42, 0.9),
-        rgba(15, 23, 42, 0.7)
-      );
-      box-shadow:
-        0 18px 50px rgba(15, 23, 42, 0.9),
-        0 0 0 1px rgba(15, 23, 42, 0.7);
-    }
-
-    .wp-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .wp-logo-orb {
-      width: 28px;
-      height: 28px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 20%, #fef9c3, #fbbf24 35%, #22c55e 70%, #0ea5e9 100%);
-      box-shadow:
-        0 0 15px rgba(250, 204, 21, 0.9),
-        0 0 22px rgba(56, 189, 248, 0.7);
-    }
-
-    .wp-title {
-      font-family: "Montserrat", system-ui, sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .wp-title span {
-      color: var(--gold);
-    }
-
-    .wp-nav {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.8rem;
-    }
-
-    .wp-nav a {
-      position: relative;
-      text-decoration: none;
-      color: var(--muted);
-      padding: 4px 8px;
-      border-radius: 999px;
-      transition: color 0.2s ease, background 0.2s ease;
-    }
-
-    .wp-nav a::after {
-      content: "";
-      position: absolute;
-      left: 8px;
-      right: 8px;
-      bottom: 2px;
-      height: 2px;
-      border-radius: 999px;
-      background: linear-gradient(to right, #22c55e, #38bdf8, #facc15);
-      transform: scaleX(0);
-      transform-origin: center;
-      transition: transform 0.25s ease;
-      opacity: 0.9;
-    }
-
-    .wp-nav a:hover {
-      color: #e5e7eb;
-      background: rgba(15, 23, 42, 0.8);
-    }
-
-    .wp-nav a:hover::after {
-      transform: scaleX(1);
-    }
-
-    .wp-nav a.active {
-      color: #e5e7eb;
-      background: rgba(15, 23, 42, 0.9);
-    }
-
-    .wp-nav a.active::after {
-      transform: scaleX(1);
-    }
-
-    @media (max-width: 640px) {
-      .wp-nav {
-        display: none;
-      }
-    }
-
-    /* HERO */
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-      gap: 18px;
-      margin-top: 22px;
-      align-items: stretch;
-    }
-
-    @media (max-width: 860px) {
-      .hero-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    .hero-copy {
-      padding: 14px 12px 14px;
-    }
-
-    @media (min-width: 768px) {
-      .hero-copy {
-        padding: 18px 14px 18px;
-      }
-    }
-
-    .hero-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.3), rgba(15, 23, 42, 0.9));
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-bottom: 10px;
-    }
-
-    .hero-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: radial-gradient(circle, #22c55e, #15803d);
-      box-shadow: 0 0 8px rgba(34, 197, 94, 0.9);
-    }
-
-    .hero-title {
-      font-family: "Montserrat", system-ui, sans-serif;
-      font-size: 1.9rem;
-      line-height: 1.15;
-      margin-bottom: 8px;
-      letter-spacing: 0.01em;
-    }
-
-    @media (min-width: 768px) {
-      .hero-title {
-        font-size: 2.1rem;
-      }
-    }
-
-    .hero-title span {
-      background: linear-gradient(to right, #38bdf8, #22c55e, #facc15);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .hero-sub {
-      font-size: 0.9rem;
-      color: var(--muted);
-      max-width: 34rem;
-      margin-bottom: 14px;
-    }
-
-    .hero-bullets {
-      font-size: 0.82rem;
-      color: var(--muted);
-      margin-bottom: 14px;
-    }
-
-    .hero-bullets li {
-      margin-left: 1.1em;
-      margin-bottom: 4px;
-    }
-    /* --- SPACING FIXES (ADDED BY CHATGPT) --- */
-/* SPACING FIXES */
-.hero-title {
-  line-height: 1.22 !important;
-  margin-bottom: 14px !important;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
 }
 
-.hero-sub {
-  margin-bottom: 18px !important;
-  line-height: 1.45 !important;
+/* ---------------------------------------------------------
+   GLOBAL RESET
+--------------------------------------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.hero-bullets {
-  margin-bottom: 18px !important;
-  line-height: 1.5 !important;
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  user-select: none;
 }
 
-/* CTA + NOTE SPACING FIX */
-.hero-cta-row {
-  margin-top: 12px !important;
-  margin-bottom: 10px !important;
-}
-/* Increase space between the CTA button and "What does this measure?" */
-#heroHowBtn {
-  margin-top: 18px !important;
-}
-
-.hero-note {
-  margin-top: 6px !important;
-  margin-bottom: 4px !important;
-  line-height: 1.35 !important;
+/* ---------------------------------------------------------
+   INTRO CINEMATIC
+--------------------------------------------------------- */
+#intro-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(56,189,248,0.25), transparent 60%), #020617;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
 }
 
-    .hero-note strong {
-      color: #e5e7eb;
-    }
-
-    .hero-card-shell {
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
-    }
-
-    .game-shell {
-      width: 100%;
-      max-width: 520px;
-    }
-
-    /* GAME CARD */
-
-    .game-card {
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.8));
-      border-radius: 22px;
-      padding: 20px 18px 16px;
-      box-shadow:
-        0 18px 60px rgba(15, 23, 42, 0.9),
-        0 0 0 1px rgba(148, 163, 184, 0.35);
-      backdrop-filter: blur(18px);
-      border: 1px solid rgba(148, 163, 184, 0.45);
-    }
-
-    @media (min-width: 640px) {
-      .game-card {
-        padding: 22px 22px 18px;
-        border-radius: 24px;
-      }
-    }
-
-    .game-header {
-      text-align: center;
-      margin-bottom: 16px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 3px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.35), rgba(15, 23, 42, 0.7));
-      font-size: 0.72rem;
-      color: var(--muted);
-      gap: 6px;
-    }
-
-    .pill-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: radial-gradient(circle, #22c55e, #15803d);
-      box-shadow: 0 0 6px rgba(34, 197, 94, 0.9);
-    }
-
-    .pill-wrap {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 8px;
-    }
-
-    .game-title {
-      font-size: 1.25rem;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: #e5e7eb;
-    }
-
-    .game-subtitle {
-      margin-top: 4px;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    /* ORB + EVOLUTION */
-
-    .orb-wrap {
-      display: flex;
-      justify-content: center;
-      margin: 14px 0 14px;
-    }
-
-    .orb {
-      position: relative;
-      width: 120px;
-      height: 120px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 20%, #e0f2fe, #0ea5e9 40%, #0369a1 70%, #020617 100%);
-      box-shadow:
-        0 0 40px rgba(56, 189, 248, 0.7),
-        0 0 80px rgba(14, 165, 233, 0.55);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: visible;
-      animation: orbBreath 6s ease-in-out infinite;
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .orb-core {
-      width: 60px;
-      height: 60px;
-      border-radius: inherit;
-      background: radial-gradient(circle at 30% 20%, #fef9c3, #fbbf24 40%, #eab308 80%);
-      box-shadow: 0 0 25px rgba(250, 204, 21, 0.9);
-      transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
-    }
-
-    .orb-ring {
-      position: absolute;
-      border-radius: 999px;
-      border: 1.5px solid rgba(56, 189, 248, 0.5);
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.7);
-      animation: ringSpin 12s linear infinite;
-      opacity: 0.4;
-      transition: opacity 0.35s ease, transform 0.4s ease, border-color 0.4s ease;
-    }
-
-    .orb-ring.r1 {
-      width: 150%;
-      height: 150%;
-    }
-
-    .orb-ring.r2 {
-      width: 190%;
-      height: 190%;
-      opacity: 0;
-      animation-duration: 18s;
-    }
-
-    .orb-ring.r3 {
-      width: 230%;
-      height: 230%;
-      opacity: 0;
-      border-style: dashed;
-      animation-duration: 26s;
-    }
-
-    .orb-particles {
-      position: absolute;
-      inset: -15%;
-      background-image:
-        radial-gradient(circle, rgba(248, 250, 252, 0.2) 0, transparent 60%),
-        radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.5) 0, transparent 60%);
-      mix-blend-mode: screen;
-      opacity: 0.35;
-      filter: blur(6px);
-      transition: opacity 0.4s ease;
-    }
-
-    @keyframes orbBreath {
-      0%, 100% {
-        box-shadow:
-          0 0 30px rgba(56, 189, 248, 0.6),
-          0 0 70px rgba(14, 165, 233, 0.4);
-      }
-      50% {
-        box-shadow:
-          0 0 55px rgba(56, 189, 248, 0.9),
-          0 0 110px rgba(14, 165, 233, 0.7);
-      }
-    }
-
-    @keyframes ringSpin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @keyframes levelFlash {
-      0% {
-        box-shadow:
-          0 0 0 0 rgba(250, 204, 21, 0.9),
-          0 0 40px rgba(56, 189, 248, 0.7);
-      }
-      100% {
-        box-shadow:
-          0 0 0 22px rgba(250, 204, 21, 0),
-          0 0 40px rgba(56, 189, 248, 0.7);
-      }
-    }
-
-    .orb.level-up-flash {
-      animation: levelFlash 0.6s ease-out;
-    }
-
-    /* Level states: SIZE + COLORS + RINGS + PARTICLES */
-    .orb.level-1 {
-      transform: scale(0.9);
-      filter: saturate(0.85);
-    }
-
-    .orb.level-2 {
-      transform: scale(1.0);
-      filter: saturate(1);
-    }
-
-    .orb.level-3 {
-      transform: scale(1.07);
-    }
-
-    .orb.level-3 .orb-core {
-      background: radial-gradient(circle at 30% 20%, #fef3c7, #facc15 40%, #f97316 80%);
-    }
-
-    .orb.level-3 .orb-ring.r2 {
-      opacity: 0.4;
-    }
-
-    .orb.level-4 {
-      transform: scale(1.13);
-      background: radial-gradient(circle at 20% 10%, #dbeafe, #0ea5e9 30%, #22c55e 70%, #020617 100%);
-    }
-
-    .orb.level-4 .orb-particles {
-      opacity: 0.45;
-    }
-
-    .orb.level-5 {
-      transform: scale(1.18);
-    }
-
-    .orb.level-5 .orb-core {
-      background: radial-gradient(circle at 30% 20%, #fef3c7, #facc15 30%, #22c55e 70%, #0ea5e9 100%);
-      box-shadow:
-        0 0 30px rgba(250, 204, 21, 0.9),
-        0 0 60px rgba(56, 189, 248, 0.7);
-    }
-
-    .orb.level-5 .orb-ring.r2 {
-      opacity: 0.6;
-    }
-
-    .orb.level-5 .orb-ring.r3 {
-      opacity: 0.35;
-    }
-
-    .orb.level-6 {
-      transform: scale(1.22);
-      box-shadow:
-        0 0 70px rgba(56, 189, 248, 1),
-        0 0 130px rgba(34, 197, 94, 0.9),
-        0 0 160px rgba(250, 204, 21, 0.8);
-      filter: saturate(1.2);
-    }
-
-    .orb.level-6 .orb-particles {
-      opacity: 0.55;
-    }
-
-    .orb.level-7 {
-      transform: scale(1.25);
-      background: radial-gradient(circle at 30% 20%, #fef9c3, #fbbf24 30%, #22c55e 65%, #0ea5e9 90%);
-      box-shadow:
-        0 0 80px rgba(250, 204, 21, 1),
-        0 0 160px rgba(56, 189, 248, 1);
-      filter: saturate(1.35);
-    }
-
-    .orb.level-7 .orb-core {
-      background: radial-gradient(circle at 30% 20%, #fef3c7, #facc15 25%, #f97316 75%);
-      box-shadow:
-        0 0 35px rgba(250, 204, 21, 1),
-        0 0 80px rgba(245, 158, 11, 0.9);
-      transform: scale(1.1);
-    }
-
-    .orb.level-7 .orb-ring.r1,
-    .orb.level-7 .orb-ring.r2,
-    .orb.level-7 .orb-ring.r3 {
-      opacity: 0.7;
-      border-color: rgba(250, 204, 21, 0.9);
-    }
-
-    .orb-label {
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-top: 2px;
-    }
-
-    .orb-level-text {
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--gold);
-      margin-top: 4px;
-    }
-
-    /* GAME CONTENT */
-
-    .section {
-      margin-top: 8px;
-      padding: 12px 12px 10px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.65));
-      border: 1px solid rgba(51, 65, 85, 0.9);
-    }
-
-    .section-header {
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .scenario-title {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .scenario-body {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    .choices {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .timer-text {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #f97316;
-      margin-bottom: 6px;
-      min-height: 1.2em;
-    }
-
-    .reflection-text {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    .stats-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 10px;
-    }
-
-    .stat-pill {
-      font-size: 0.8rem;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.9);
-      color: var(--muted);
-    }
-
-    .stat-pill strong {
-      color: var(--text);
-    }
-
-    .footer-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-top: 10px;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .progress-line {
-      flex: 1;
-      height: 4px;
-      border-radius: 999px;
-      background: rgba(30, 64, 175, 0.6);
-      overflow: hidden;
-      position: relative;
-      min-width: 90px;
-    }
-
-    .progress-fill {
-      position: absolute;
-      inset: 0;
-      width: 0%;
-      border-radius: inherit;
-      background: linear-gradient(to right, #22c55e, #38bdf8, #facc15);
-      box-shadow: 0 0 8px rgba(56, 189, 248, 0.9);
-      transition: width 0.6s ease;
-    }
-
-    .footer-small {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 0.72rem;
-      color: var(--muted);
-    }
-
-    .align-center {
-      text-align: center;
-    }
-
-    .mb-10 {
-      margin-bottom: 10px;
-    }
-
-    .mt-6 {
-      margin-top: 6px;
-    }
-
-    .btn-row {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .btn-row-inline {
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    /* BUTTON (your Uiverse design) */
-
-    /* From Uiverse.io by Allyhere */
-    .btn-donate {
-      --clr-font-main: hsla(0 0% 20% / 100);
-      --btn-bg-1: hsla(194 100% 69% / 1);
-      --btn-bg-2: hsla(217 100% 56% / 1);
-      --btn-bg-color: hsla(360 100% 100% / 1);
-      --radii: 0.5em;
-      cursor: pointer;
-      padding: 0.9em 1.4em;
-      min-width: 120px;
-      min-height: 44px;
-      font-size: 1rem;
-      font-weight: 500;
-      transition: 0.8s;
-      background-size: 280% auto;
-      background-image: linear-gradient(
-        325deg,
-        var(--btn-bg-2) 0%,
-        var(--btn-bg-1) 55%,
-        var(--btn-bg-2) 90%
-      );
-      border: none;
-      border-radius: var(--radii);
-      color: var(--btn-bg-color);
-      box-shadow:
-        0px 0px 20px rgba(71, 184, 255, 0.5),
-        0px 5px 5px -1px rgba(58, 125, 233, 0.25),
-        inset 4px 4px 8px rgba(175, 230, 255, 0.5),
-        inset -4px -4px 8px rgba(19, 95, 216, 0.35);
-      text-align: center;
-    }
-
-    .btn-donate:hover {
-      background-position: right top;
-    }
-
-    .btn-donate:is(:focus, :focus-visible, :active) {
-      outline: none;
-      box-shadow:
-        0 0 0 3px var(--btn-bg-color),
-        0 0 0 6px var(--btn-bg-2);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .btn-donate {
-        transition: linear;
-      }
-    }
-
-    .btn-ghost {
-      background: transparent;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.55);
-      padding: 0.6em 1.2em;
-      font-size: 0.85rem;
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-
-    .btn-ghost:hover {
-      border-color: #38bdf8;
-      color: #e5e7eb;
-      box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
-    }
-
-    .pill-type {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(250, 204, 21, 0.7);
-      font-size: 0.75rem;
-      color: #fef9c3;
-      background: radial-gradient(circle at top, rgba(250, 204, 21, 0.3), rgba(15, 23, 42, 0.9));
-      gap: 4px;
-    }
-
-    .pill-type-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: #fbbf24;
-      box-shadow: 0 0 6px rgba(250, 204, 21, 0.9);
-    }
-
-    .fade-enter {
-      animation: fadeInUp 0.4s ease forwards;
-    }
-
-    @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* FOOTER */
-
-    .wp-footer {
-      margin-top: 26px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(30, 64, 175, 0.8);
-      font-size: 0.8rem;
-      color: var(--muted);
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .wp-footer-links {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .wp-footer a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.78rem;
-      transition: color 0.2s ease;
-    }
-
-    .wp-footer a:hover {
-      color: #e5e7eb;
-    }
-  </style>
+#intro-card {
+  text-align: center;
+  padding: 32px 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(148,163,184,0.4);
+  background: radial-gradient(circle at top, rgba(56,189,248,0.12), rgba(15,23,42,0.98));
+  box-shadow: 0 24px 70px rgba(15,23,42,0.9);
+  max-width: 360px;
+  width: 90%;
+}
+
+#intro-logo {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  margin: 0 auto 16px auto;
+  background: radial-gradient(circle at center, var(--gold), #eab308, #854d0e);
+  box-shadow: 0 0 35px rgba(250,204,21,0.8);
+}
+
+#intro-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+}
+
+#intro-subtitle {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 22px;
+  line-height: 1.5;
+}
+
+#intro-btn {
+  margin-top: 6px;
+}
+
+/* Fade out animation for intro */
+.fade-out {
+  animation: fadeOutIntro 0.7s ease forwards;
+}
+@keyframes fadeOutIntro {
+  to {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+}
+
+/* ---------------------------------------------------------
+   PAGE WRAPPER
+--------------------------------------------------------- */
+#game-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------
+   PARTICLE BACKGROUND (cinematic)
+--------------------------------------------------------- */
+#particles {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: radial-gradient(circle at center, rgba(56,189,248,0.08), transparent 70%);
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 50%;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  from { transform: translateY(100vh); opacity: 0.7; }
+  to   { transform: translateY(-10vh); opacity: 0; }
+}
+
+/* ---------------------------------------------------------
+   GAME HEADER + PROGRESS BAR
+--------------------------------------------------------- */
+#game-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem;
+  margin-top: 15px;
+  margin-bottom: 12px;
+}
+
+#progress-wrapper {
+  margin: 10px auto 8px auto;
+  max-width: 420px;
+  text-align: left;
+}
+
+#progress-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+#progress-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(15,23,42,0.85);
+  overflow: hidden;
+  border: 1px solid rgba(148,163,184,0.35);
+}
+
+#progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--blue), var(--teal));
+  transition: width 0.35s ease;
+}
+
+/* ---------------------------------------------------------
+   ORB DESIGN
+--------------------------------------------------------- */
+#orb {
+  width: 120px;
+  height: 120px;
+  margin: 30px auto 26px auto;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, var(--blue), #0ea5e9, #0369a1 70%);
+  box-shadow: 0 0 25px var(--blue), 0 0 50px var(--blue);
+  transition: all 0.4s ease;
+  animation: orbPulse 4s ease-in-out infinite;
+}
+@keyframes orbPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* ---------------------------------------------------------
+   LEVEL HEADER & QUESTION TEXT
+--------------------------------------------------------- */
+#level-title {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.05rem;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+#question-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+  margin-bottom: 26px;
+  line-height: 1.45;
+}
+
+/* ---------------------------------------------------------
+   CHOICE BUTTONS (NEW UIVERSE DESIGN)
+--------------------------------------------------------- */
+.choice-btn {
+  margin-bottom: 16px;
+}
+
+/* From Uiverse.io by Spacious74 */
+.button {
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 16px;
+  border: none;
+  padding: 2px;
+  background: radial-gradient(circle 80px at 80% -10%, #ffffff, #181b1b);
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  display: block;
+  margin: 0 auto;
+}
+.button::after {
+  content: "";
+  position: absolute;
+  width: 65%;
+  height: 60%;
+  border-radius: 120px;
+  top: 0;
+  right: 0;
+  box-shadow: 0 0 20px #ffffff38;
+  z-index: -1;
+}
+
+.blob1 {
+  position: absolute;
+  width: 70px;
+  height: 100%;
+  border-radius: 16px;
+  bottom: 0;
+  left: 0;
+  background: radial-gradient(
+    circle 60px at 0% 100%,
+    #3fe9ff,
+    #0000ff80,
+    transparent
+  );
+  box-shadow: -10px 10px 30px #0051ff2d;
+}
+
+/* Add styling for blob2 so it doesn't just sit invisible */
+.blob2 {
+  position: absolute;
+  width: 60px;
+  height: 60%;
+  border-radius: 16px;
+  top: -8px;
+  right: 6%;
+  background: radial-gradient(
+    circle 40px at 100% 0%,
+    #ffffff30,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.inner {
+  padding: 14px 18px;
+  border-radius: 14px;
+  color: #fff;
+  z-index: 3;
+  position: relative;
+  background: radial-gradient(circle 80px at 80% -50%, #777777, #0f1111);
+  text-align: left;
+  font-family: "Inter", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.inner::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  border-radius: 14px;
+  background: radial-gradient(
+    circle 60px at 0% 100%,
+    #00e1ff1a,
+    #0000ff11,
+    transparent
+  );
+  position: absolute;
+}
+
+/* ---------------------------------------------------------
+   LEVEL TRANSITION OVERLAY
+--------------------------------------------------------- */
+#level-transition {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#level-transition-inner {
+  padding: 18px 24px;
+  border-radius: 999px;
+  background: radial-gradient(circle at top, rgba(56,189,248,0.2), rgba(15,23,42,0.96));
+  border: 1px solid rgba(148,163,184,0.5);
+  color: var(--text);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  box-shadow: 0 18px 60px rgba(15,23,42,0.9);
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.show-level-transition #level-transition {
+  display: flex;
+}
+
+.show-level-transition #level-transition-inner {
+  animation: levelPop 0.8s ease forwards;
+}
+
+@keyframes levelPop {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(0) scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) scale(1);
+  }
+}
+
+/* ---------------------------------------------------------
+   FINAL SCREEN
+--------------------------------------------------------- */
+#final-screen {
+  display: none;
+  margin-top: 24px;
+}
+#final-title {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.7rem;
+  margin-bottom: 16px;
+}
+#final-summary {
+  font-size: 1rem;
+  margin-bottom: 30px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+</style>
 </head>
+
 <body>
-  <div class="bg-particles"></div>
 
-  <div class="page-shell">
-    
-    <nav class="wp-nav" style="margin-top:0; padding-top:10px;">
-  <a href="#">Home</a>
-  <a href="#">Courses</a>
-  <a href="#">Portfolio Builder</a>
-  <a href="#">Exam</a>
-  <a href="#" class="active">Mindset Game</a>
-</nav>
-
-    <!-- HERO + GAME -->
-    <div class="hero-grid">
-      <section class="hero-copy">
-        <div class="hero-kicker">
-          <span class="hero-dot"></span>
-          Interactive Mindset Experience
-        </div>
-        <h1 class="hero-title">
-          Train your <span>Wealth Mindset</span> — one decision at a time.
-        </h1>
-        <p class="hero-sub">
-          This isn’t a quiz with right or wrong answers. It’s a mirror.  
-          Walk through real-life money moments, feel your reactions, and watch your Wealth Orb evolve with every choice.
-        </p>
-        <ul class="hero-bullets">
-          <li>20 short scenarios based on real life</li>
-          <li>Calm reflection moments + 5-second pressure tests</li>
-          <li>See your traits: discipline, patience, risk control, emotions, and long-term vision</li>
-        </ul>
-        <div class="hero-cta-row">
-          <button class="btn-donate" id="heroPlayBtn">Start the Mindset Game</button>
-          <button class="btn-ghost" id="heroHowBtn">What does this measure?</button>
-        </div>
-        <p class="hero-note">
-          <strong>No login required. No score to “ace”.</strong> Just honest choices and insight you can use on your WealthPath 😏.
-        </p>
-      </section>
-
-      <section class="hero-card-shell">
-        <div class="game-shell">
-          <div class="game-card">
-            <div class="game-header">
-              <div class="pill-wrap">
-                <div class="pill">
-                  <span class="pill-dot"></span>
-                  WealthPath • Mindset Game
-                </div>
-              </div>
-              <h2 class="game-title">Mindset Journey</h2>
-              <p class="game-subtitle" id="subtitle">
-                Every decision shapes your path. Grow your Wealth Orb through better choices.
-              </p>
-            </div>
-
-            <div class="orb-wrap">
-              <div class="orb level-1" id="orb">
-                <div class="orb-core"></div>
-                <div class="orb-ring r1"></div>
-                <div class="orb-ring r2"></div>
-                <div class="orb-ring r3"></div>
-                <div class="orb-particles"></div>
-              </div>
-            </div>
-            <p class="orb-label" id="orbLabel">Level 1 • Spark</p>
-            <p class="orb-level-text" id="orbHint"></p>
-
-            <div id="content"></div>
-
-            <div class="footer-small" id="footerNote">
-              Tip: Answer honestly. This game is about awareness, not perfection.
-            </div>
-          </div>
-        </div>
-      </section>
+<!-- INTRO CINEMATIC -->
+<div id="intro-overlay">
+  <div id="intro-card">
+    <div id="intro-logo"></div>
+    <div id="intro-title">WealthPath</div>
+    <div id="intro-subtitle">
+      Your mindset is the real asset.<br/>
+      Every choice you make shapes the path you're walking into.
     </div>
 
-<!-- FOOTER -->
-<footer style="
-  width:100%;
-  text-align:center;
-  padding:50px 20px;
-  margin-top:60px;
-  color:#9aa4b2;
-  font-size:0.9rem;
-  line-height:1.5;
-">
+    <div id="intro-btn" class="choice-btn">
+      <button class="button" onclick="startGameFromIntro()">
+        <div class="blob1"></div>
+        <div class="blob2"></div>
+        <div class="inner">Begin Your Journey</div>
+      </button>
+    </div>
+  </div>
+</div>
 
-  <!-- GRADIENT DIVIDER -->
-  <div style="
-    width:100%;
-    max-width:900px;
-    margin:0 auto 40px auto;
-    height:2px;
-    background: linear-gradient(to right, #38bdf8, #facc15, #22c55e);
-    border-radius:999px;
-    opacity:0.9;
-  "></div>
+<!-- PARTICLE BACKGROUND -->
+<div id="particles"></div>
 
-  <!-- BRAND NAME -->
-  <p style="color:#ffffff; font-weight:700; font-size:1.4rem; margin-bottom:8px;">
-    WealthPath
-  </p>
+<!-- LEVEL TRANSITION -->
+<div id="level-transition">
+  <div id="level-transition-inner"></div>
+</div>
 
-  <!-- TAGLINE -->
-  <p style="color:#e5e7eb; font-size:1rem; margin-bottom:26px;">
-    “A Journey Uniquely Yours”
-  </p>
+<!-- GAME CONTAINER -->
+<div id="game-container">
 
-  <!-- COPYRIGHT -->
-  <p style="color:#9aa4b2; margin-bottom:18px;">
-    © <span id="wpYear"></span> WealthPath. All rights reserved.
-  </p>
+  <h1 id="game-title">WealthPath — The Mindset Game</h1>
 
-  <!-- CONTACT -->
-  <p style="color:#9aa4b2;">
-    Contact Us : 
-    <a href="mailto:info@mywealthpath.org" style="color:#9aa4b2; text-decoration:none;">
-      info@mywealthpath.org
-    </a>
-  </p>
-
-</footer>
-
-<script>
-  document.getElementById("wpYear").textContent = new Date().getFullYear();
-</script>
+  <!-- Progress -->
+  <div id="progress-wrapper">
+    <div id="progress-label">Question 0 of 0</div>
+    <div id="progress-bar">
+      <div id="progress-fill"></div>
+    </div>
   </div>
 
-  <!-- GAME LOGIC (same engine, upgraded orb visuals) -->
-  <script>
-    // ---- GAME DATA (same as before) ----
-    const scenarios = [
-      {
-        id: 1,
-        type: "chill",
-        title: "Payday Energy",
-        text: "You just got paid after covering rent and essentials. How do you handle the extra money?",
-        choices: [
-          {
-            text: "Blow most of it tonight. I deserve it.",
-            deltas: { discipline: -3, patience: -2, risk: -1, emotion: 0, vision: -3 },
-            reflection: "Short-term fun isn’t bad, but making it the default keeps you on the same level."
-          },
-          {
-            text: "Save it all. No fun, just stack.",
-            deltas: { discipline: 3, patience: 2, risk: 1, emotion: -1, vision: 1 },
-            reflection: "You’re disciplined, but leaving zero space for joy can backfire over time."
-          },
-          {
-            text: "Invest most, keep a small slice to enjoy.",
-            deltas: { discipline: 3, patience: 3, risk: 1, emotion: 1, vision: 3 },
-            reflection: "Balanced. You fund the future and still let yourself breathe today."
-          }
-        ]
-      },
-      {
-        id: 2,
-        type: "chill",
-        title: "Late-Night Scroll",
-        text: "It’s 11:30 PM. You planned to read about investing, but your feed is calling.",
-        choices: [
-          {
-            text: "Open social and scroll until I fall asleep.",
-            deltas: { discipline: -2, patience: -1, risk: 0, emotion: -1, vision: -2 },
-            reflection: "Easy choice, but it quietly steals hours you could compound into skills."
-          },
-          {
-            text: "Read one short investing page, then sleep.",
-            deltas: { discipline: 2, patience: 2, risk: 0, emotion: 1, vision: 3 },
-            reflection: "You didn’t aim for perfect, just better — that’s how growth actually sticks."
-          },
-          {
-            text: "Push myself into a 2-hour grind session.",
-            deltas: { discipline: 2, patience: -1, risk: 0, emotion: -1, vision: 1 },
-            reflection: "Over-grinding sounds good, but burning out is still a form of self-sabotage."
-          }
-        ]
-      },
-      {
-        id: 3,
-        type: "balanced",
-        title: "Friend’s “Hot Tip”",
-        text: "A friend says a random coin is going to the moon this week. No research, just hype.",
-        choices: [
-          {
-            text: "Throw in money right away. I don’t want to miss it.",
-            deltas: { discipline: -2, patience: -3, risk: -3, emotion: -2, vision: -2 },
-            reflection: "Chasing hype feels exciting, but it trains your brain to depend on luck, not strategy."
-          },
-          {
-            text: "Ask questions, then still avoid it. It doesn’t fit my plan.",
-            deltas: { discipline: 3, patience: 3, risk: 3, emotion: 2, vision: 2 },
-            reflection: "You protected your path instead of handing it to FOMO. That’s real investor energy."
-          },
-          {
-            text: "Put a tiny amount I can afford to lose, for the experience.",
-            deltas: { discipline: 1, patience: 0, risk: -1, emotion: 0, vision: 0 },
-            reflection: "You treated it like a lesson, not a life changer — better than going all in blindly."
-          }
-        ]
-      },
-      {
-        id: 4,
-        type: "timed",
-        title: "Market Dip Live",
-        text: "Your long-term investment drops 3% in a single day. You have 3 seconds. What’s your move?",
-        timeLimit: 5,
-        choices: [
-          {
-            text: "Panic-sell everything right now.",
-            deltas: { discipline: -3, patience: -3, risk: -3, emotion: -3, vision: -3 },
-            reflection: "Selling from fear trains your nervous system to run, not to lead."
-          },
-          {
-            text: "Do nothing and stick to the long-term plan.",
-            deltas: { discipline: 3, patience: 3, risk: 3, emotion: 2, vision: 3 },
-            reflection: "You just practiced emotional control — a core wealth skill most people never build."
-          }
-        ]
-      },
-      {
-        id: 5,
-        type: "chill",
-        title: "Learning Window",
-        text: "You have 25 free minutes between tasks.",
-        choices: [
-          {
-            text: "Watch random drama videos.",
-            deltas: { discipline: -1, patience: -1, risk: 0, emotion: -1, vision: -1 },
-            reflection: "Entertainment is fine, but autopilot content usually doesn’t move you forward."
-          },
-          {
-            text: "Watch a short video on long-term investing.",
-            deltas: { discipline: 2, patience: 2, risk: 1, emotion: 1, vision: 2 },
-            reflection: "You turned idle time into skill time. That’s how small windows become big shifts."
-          },
-          {
-            text: "Review your money goals and write one action for this week.",
-            deltas: { discipline: 3, patience: 3, risk: 1, emotion: 1, vision: 3 },
-            reflection: "You moved from consuming to creating a plan — that’s a mindset upgrade."
-          }
-        ]
-      },
-      {
-        id: 6,
-        type: "balanced",
-        title: "Lifestyle Creep",
-        text: "You got a raise. Your first thought is…",
-        choices: [
-          {
-            text: "Upgrade everything: clothes, food, subscriptions.",
-            deltas: { discipline: -2, patience: -2, risk: -1, emotion: 0, vision: -2 },
-            reflection: "When lifestyle rises with every dollar, wealth never gets a chance to grow."
-          },
-          {
-            text: "Increase investing and savings first, then upgrade one thing.",
-            deltas: { discipline: 3, patience: 2, risk: 1, emotion: 1, vision: 3 },
-            reflection: "You let your future benefit from your raise, not just your present comfort."
-          },
-          {
-            text: "Keep living the same and save all the extra.",
-            deltas: { discipline: 2, patience: 3, risk: 1, emotion: 0, vision: 2 },
-            reflection: "You chose maximum gap between income and expenses — strong move."
-          }
-        ]
-      },
-      {
-        id: 7,
-        type: "chill",
-        title: "Self-Talk Loop",
-        text: "You catch yourself thinking: \"I’m just not good with money.\"",
-        choices: [
-          {
-            text: "Agree with it and move on.",
-            deltas: { discipline: -2, patience: -2, risk: 0, emotion: -2, vision: -2 },
-            reflection: "When you accept limiting beliefs as facts, your actions quietly match them."
-          },
-          {
-            text: "Challenge it and remind yourself you’re learning.",
-            deltas: { discipline: 2, patience: 2, risk: 0, emotion: 2, vision: 2 },
-            reflection: "You separated your identity from your current skills — that’s growth mindset."
-          },
-          {
-            text: "Write one thing you’ve already improved with money.",
-            deltas: { discipline: 3, patience: 2, risk: 0, emotion: 3, vision: 2 },
-            reflection: "You gave your brain proof that you’re changing. Evidence beats negative loops."
-          }
-        ]
-      },
-      {
-        id: 8,
-        type: "balanced",
-        title: "Small Windfall",
-        text: "You receive an unexpected $200.",
-        choices: [
-          {
-            text: "Instantly spend it, it’s “extra” money.",
-            deltas: { discipline: -1, patience: -1, risk: -1, emotion: 0, vision: -1 },
-            reflection: "Calling it \"extra\" tells your mind it’s throwaway, not an opportunity."
-          },
-          {
-            text: "Split: 50% fun, 50% towards debt or investing.",
-            deltas: { discipline: 2, patience: 2, risk: 1, emotion: 1, vision: 2 },
-            reflection: "You enjoyed the present and still moved your life forward — powerful combo."
-          },
-          {
-            text: "Use it fully to crush a small debt or add to investments.",
-            deltas: { discipline: 3, patience: 2, risk: 2, emotion: 0, vision: 3 },
-            reflection: "You turned a random blessing into momentum. That’s a path-builder move."
-          }
-        ]
-      },
-      {
-        id: 9,
-        type: "chill",
-        title: "Comparison Trap",
-        text: "You see someone your age posting luxury trips and cars online.",
-        choices: [
-          {
-            text: "Feel behind and start doubting your whole path.",
-            deltas: { discipline: -1, patience: -2, risk: -1, emotion: -3, vision: -2 },
-            reflection: "Comparison pulls your attention from your lane to someone else’s highlight reel."
-          },
-          {
-            text: "Remind yourself you’re on a different timeline.",
-            deltas: { discipline: 2, patience: 2, risk: 0, emotion: 2, vision: 2 },
-            reflection: "You protected your peace and kept your focus — that’s invisible progress."
-          },
-          {
-            text: "Use it as fuel, set one concrete money goal.",
-            deltas: { discipline: 3, patience: 2, risk: 0, emotion: 1, vision: 3 },
-            reflection: "You turned comparison into direction instead of self-attack."
-          }
-        ]
-      },
-      {
-        id: 10,
-        type: "balanced",
-        title: "Bored Online",
-        text: "You’re bored and browsing shopping apps.",
-        choices: [
-          {
-            text: "Buy something small just to feel better.",
-            deltas: { discipline: -2, patience: -1, risk: 0, emotion: -1, vision: -1 },
-            reflection: "Emotional spending gives a quick hit, but it trains you to avoid feelings with purchases."
-          },
-          {
-            text: "Close the app and check your financial goals dashboard.",
-            deltas: { discipline: 3, patience: 2, risk: 1, emotion: 1, vision: 3 },
-            reflection: "You redirected the urge into clarity. That’s a mindset pattern you can repeat."
-          },
-          {
-            text: "Leave the app open but don’t buy anything.",
-            deltas: { discipline: 1, patience: 0, risk: 0, emotion: 0, vision: 0 },
-            reflection: "You resisted the buy, which is a win, but staying in temptation drains your energy."
-          }
-        ]
-      },
-      {
-        id: 11,
-        type: "chill",
-        title: "Learning Style",
-        text: "You want to learn investing, but the amount of info feels overwhelming.",
-        choices: [
-          {
-            text: "Avoid it. You’ll “figure it out later.”",
-            deltas: { discipline: -2, patience: -2, risk: 0, emotion: -1, vision: -2 },
-            reflection: "Avoidance protects you from discomfort now but keeps the fear in place long-term."
-          },
-          {
-            text: "Pick one simple guide and commit to 10 minutes a day.",
-            deltas: { discipline: 3, patience: 3, risk: 1, emotion: 2, vision: 3 },
-            reflection: "You shrank the task down until it became doable. That’s how big shifts start."
-          },
-          {
-            text: "Try to learn everything in one weekend.",
-            deltas: { discipline: 1, patience: -1, risk: 0, emotion: -1, vision: 1 },
-            reflection: "All-in bursts feel productive but rarely become a lifestyle."
-          }
-        ]
-      },
-      {
-        id: 12,
-        type: "balanced",
-        title: "Debt vs Investing",
-        text: "You have some high-interest debt and also want to invest.",
-        choices: [
-          {
-            text: "Ignore the debt and only invest. Investing sounds better.",
-            deltas: { discipline: -1, patience: -2, risk: -2, emotion: -1, vision: 0 },
-            reflection: "Ignoring the weight doesn’t make it lighter. Interest compounds against you too."
-          },
-          {
-            text: "Focus mainly on high-interest debt, invest a smaller amount.",
-            deltas: { discipline: 3, patience: 2, risk: 2, emotion: 1, vision: 3 },
-            reflection: "You chose to remove the leak while still building the boat. Smart combo."
-          },
-          {
-            text: "Only attack debt, no investing until it’s gone.",
-            deltas: { discipline: 2, patience: 1, risk: 1, emotion: 0, vision: 1 },
-            reflection: "You simplified your focus. Just make sure you re-enter investing when ready."
-          }
-        ]
-      },
-      {
-        id: 13,
-        type: "timed",
-        title: "Limited-Time Hype",
-        text: "A “once in a lifetime” offer pops up with a countdown clock. You have 3 seconds.",
-        timeLimit: 5,
-        choices: [
-          {
-            text: "Buy now, think later — the timer is stressing me.",
-            deltas: { discipline: -3, patience: -3, risk: -3, emotion: -3, vision: -2 },
-            reflection: "Urgency marketing is built to trigger fear, not clarity."
-          },
-          {
-            text: "Pause. If it’s that fragile, it’s probably not for me.",
-            deltas: { discipline: 3, patience: 3, risk: 3, emotion: 2, vision: 2 },
-            reflection: "You refused to let a clock bully your decisions. That’s real control."
-          }
-        ]
-      },
-      {
-        id: 14,
-        type: "chill",
-        title: "Support System",
-        text: "You’re the only one in your circle seriously thinking about investing.",
-        choices: [
-          {
-            text: "Hide your goals so nobody judges you.",
-            deltas: { discipline: -1, patience: -1, risk: 0, emotion: -2, vision: -1 },
-            reflection: "Silencing your goals to stay comfortable keeps you playing small."
-          },
-          {
-            text: "Share your journey with one trusted person.",
-            deltas: { discipline: 2, patience: 1, risk: 0, emotion: 2, vision: 2 },
-            reflection: "You created a small layer of support. One person can change the weight of the journey."
-          },
-          {
-            text: "Find an online community, podcast, or course that matches your goals.",
-            deltas: { discipline: 3, patience: 2, risk: 1, emotion: 2, vision: 3 },
-            reflection: "You expanded your environment on purpose. Your circle shapes your ceiling."
-          }
-        ]
-      },
-      {
-        id: 15,
-        type: "balanced",
-        title: "Consistency Check",
-        text: "You planned to invest a small amount every month, but this month feels tight.",
-        choices: [
-          {
-            text: "Skip this month and don’t think about it.",
-            deltas: { discipline: -2, patience: -1, risk: -1, emotion: -1, vision: -1 },
-            reflection: "Skipping once isn’t fatal, but unplanned skipping can become a new habit."
-          },
-          {
-            text: "Lower the amount but still invest something.",
-            deltas: { discipline: 3, patience: 2, risk: 1, emotion: 1, vision: 3 },
-            reflection: "You protected the consistency, not just the amount — that’s how identity shifts."
-          },
-          {
-            text: "Pause investing this month, but schedule a review date.",
-            deltas: { discipline: 1, patience: 1, risk: 0, emotion: 1, vision: 1 },
-            reflection: "You made a conscious decision instead of ghosting your plan."
-          }
-        ]
-      },
-      {
-        id: 16,
-        type: "chill",
-        title: "Future Self",
-        text: "You imagine yourself 10 years from now.",
-        choices: [
-          {
-            text: "You see chaos and avoid thinking about it.",
-            deltas: { discipline: -1, patience: -2, risk: 0, emotion: -2, vision: -2 },
-            reflection: "Avoiding the future doesn’t protect you from it, it just removes your say in it."
-          },
-          {
-            text: "You see a calmer version of you, with options and time freedom.",
-            deltas: { discipline: 2, patience: 3, risk: 1, emotion: 2, vision: 3 },
-            reflection: "You gave your brain a positive target. Clear visions pull you forward."
-          },
-          {
-            text: "You see the same exact life as now.",
-            deltas: { discipline: 0, patience: 0, risk: 0, emotion: -1, vision: -1 },
-            reflection: "If nothing changes, nothing changes. The good news: your choices are already shifting."
-          }
-        ]
-      },
-      {
-        id: 17,
-        type: "balanced",
-        title: "Impulse Cart",
-        text: "You filled an online cart with non-essentials. It’s time to check out.",
-        choices: [
-          {
-            text: "Buy it all. It’s already in the cart.",
-            deltas: { discipline: -2, patience: -1, risk: 0, emotion: -1, vision: -1 },
-            reflection: "The cart is not a contract. You’re allowed to change your mind before your money moves."
-          },
-          {
-            text: "Remove everything that doesn’t align with your top 1–2 goals.",
-            deltas: { discipline: 3, patience: 2, risk: 1, emotion: 1, vision: 3 },
-            reflection: "You made your goals the filter, not your impulses."
-          },
-          {
-            text: "Save the cart, step away for 24 hours, then decide.",
-            deltas: { discipline: 2, patience: 3, risk: 1, emotion: 1, vision: 2 },
-            reflection: "You added time between urge and action — that’s how you take the wheel back."
-          }
-        ]
-      },
-      {
-        id: 18,
-        type: "chill",
-        title: "Rest vs Escape",
-        text: "You’re mentally tired from life and money decisions.",
-        choices: [
-          {
-            text: "Numb out with hours of random content.",
-            deltas: { discipline: -1, patience: -1, risk: 0, emotion: -2, vision: -1 },
-            reflection: "Numbing can feel like rest, but real rest leaves you more present, not more empty."
-          },
-          {
-            text: "Choose one small thing that actually restores you (sleep, walk, music).",
-            deltas: { discipline: 2, patience: 2, risk: 0, emotion: 3, vision: 2 },
-            reflection: "You treated your nervous system like an ally, not an enemy."
-          },
-          {
-            text: "Journal your thoughts for 5 minutes, then rest.",
-            deltas: { discipline: 3, patience: 2, risk: 0, emotion: 3, vision: 2 },
-            reflection: "You gave your emotions somewhere to go. Clarity makes decisions lighter."
-          }
-        ]
-      },
-      {
-        id: 19,
-        type: "balanced",
-        title: "First Big Win",
-        text: "You hit your first real savings or investing milestone.",
-        choices: [
-          {
-            text: "Downplay it. It’s not that big anyway.",
-            deltas: { discipline: -1, patience: 0, risk: 0, emotion: -1, vision: -1 },
-            reflection: "When you dismiss your wins, your brain has no reason to repeat the behavior."
-          },
-          {
-            text: "Celebrate it intentionally and note what habits got you there.",
-            deltas: { discipline: 3, patience: 2, risk: 1, emotion: 3, vision: 3 },
-            reflection: "You turned a win into a blueprint, not just a moment."
-          },
-          {
-            text: "Celebrate by overspending and wiping out half the progress.",
-            deltas: { discipline: -2, patience: -2, risk: -1, emotion: -1, vision: -2 },
-            reflection: "Celebration is powerful, but not when it erases exactly what you’re proud of."
-          }
-        ]
-      },
-      {
-        id: 20,
-        type: "chill",
-        title: "Identity Statement",
-        text: "You’re asked to finish the sentence: “When it comes to money, I am…”",
-        choices: [
-          {
-            text: "“Lost.”",
-            deltas: { discipline: -1, patience: -1, risk: 0, emotion: -2, vision: -2 },
-            reflection: "That might be how you feel, but it’s not the full truth. You’re here, doing this work."
-          },
-          {
-            text: "“Learning and getting more intentional.”",
-            deltas: { discipline: 3, patience: 3, risk: 1, emotion: 3, vision: 3 },
-            reflection: "You claimed a growth identity. Your actions will begin to align with that sentence."
-          },
-          {
-            text: "“Trying, but I don’t always trust myself yet.”",
-            deltas: { discipline: 2, patience: 2, risk: 0, emotion: 2, vision: 2 },
-            reflection: "Honest and in motion — that’s a powerful place to start a new chapter from."
-          }
-        ]
-      }
-    ];
+  <div id="orb"></div>
 
-    const TOTAL_SCENARIOS = scenarios.length;
+  <div id="level-title"></div>
+  <div id="question-text"></div>
 
-    // GAME STATE
-    let state = "start";
-    let index = 0;
-    let stats = {
-      discipline: 0,
-      patience: 0,
-      risk: 0,
-      emotion: 0,
-      vision: 0
-    };
-    let orbLevel = 1;
-    let lastReflection = "";
-    let lastChoiceText = "";
-    let lastDeltas = null;
-    let timerId = null;
-    let timerRemaining = 0;
-    let choiceLocked = false;
+  <div id="choices"></div>
 
-    const contentEl = document.getElementById("content");
-    const subtitleEl = document.getElementById("subtitle");
-    const orbEl = document.getElementById("orb");
-    const orbLabelEl = document.getElementById("orbLabel");
-    const orbHintEl = document.getElementById("orbHint");
-    const footerNoteEl = document.getElementById("footerNote");
+  <!-- FINAL SCREEN -->
+  <div id="final-screen">
+    <div id="final-title">Your WealthPath Summary</div>
+    <div id="final-summary"></div>
+  </div>
 
-    // HERO buttons hook into same start/how screens
-    document.getElementById("heroPlayBtn").onclick = () => {
-      state = "scenario";
-      index = 0;
-      renderScenario();
-      scrollToGame();
-    };
-    document.getElementById("heroHowBtn").onclick = () => {
-      renderHowItWorks();
-      scrollToGame();
-    };
+</div>
 
-    function scrollToGame() {
-      const card = document.querySelector(".game-card");
-      if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-
-    // HELPERS
-    function resetGame() {
-      state = "start";
-      index = 0;
-      stats = { discipline: 0, patience: 0, risk: 0, emotion: 0, vision: 0 };
-      orbLevel = 1;
-      lastReflection = "";
-      lastChoiceText = "";
-      lastDeltas = null;
-      clearTimer();
-      updateOrbVisual(true);
-      renderStartScreen();
-    }
-
-    function clearTimer() {
-      if (timerId) {
-        clearInterval(timerId);
-        timerId = null;
-      }
-      timerRemaining = 0;
-    }
-
-    function nextScenario() {
-      index++;
-      clearTimer();
-      if (index >= TOTAL_SCENARIOS) {
-        state = "final";
-        renderFinalScreen();
-      } else {
-        state = "scenario";
-        renderScenario();
-      }
-    }
-
-    function updateOrbLevel() {
-      const completed = index;
-      let newLevel = 1;
-      if (completed >= 3) newLevel = 2;
-      if (completed >= 6) newLevel = 3;
-      if (completed >= 9) newLevel = 4;
-      if (completed >= 12) newLevel = 5;
-      if (completed >= 16) newLevel = 6;
-      if (completed >= 20) newLevel = 7;
-
-      if (newLevel !== orbLevel) {
-        orbLevel = newLevel;
-        updateOrbVisual(false, true); // trigger flash
-      } else {
-        updateOrbVisual();
-      }
-    }
-
-    function updateOrbVisual(initial = false, levelUp = false) {
-      orbEl.classList.remove(
-        "level-1",
-        "level-2",
-        "level-3",
-        "level-4",
-        "level-5",
-        "level-6",
-        "level-7",
-        "level-up-flash"
-      );
-      orbEl.classList.add(`level-${orbLevel}`);
-
-      const labels = {
-        1: "Level 1 • Spark",
-        2: "Level 2 • Pulse",
-        3: "Level 3 • Glow",
-        4: "Level 4 • Flame",
-        5: "Level 5 • Ascension",
-        6: "Level 6 • Visionary",
-        7: "Level 7 • Mastery"
-      };
-
-      const hints = {
-        1: "Every shift starts with one honest decision.",
-        2: "You’re building awareness. That’s the real leverage.",
-        3: "Your habits are starting to align with your vision.",
-        4: "You’re practicing control under pressure, not just in perfect moments.",
-        5: "Your default reactions are slowly becoming intentional responses.",
-        6: "You’re moving like someone who trusts their future self.",
-        7: "This isn’t perfection, it’s proof of growth. Keep compounding."
-      };
-
-      orbLabelEl.textContent = labels[orbLevel];
-      orbHintEl.textContent = hints[orbLevel];
-
-      if (levelUp && !initial) {
-        orbEl.classList.add("level-up-flash");
-        setTimeout(() => {
-          orbEl.classList.remove("level-up-flash");
-        }, 650);
-      }
-    }
-
-    function applyDeltas(deltas) {
-      if (!deltas) return;
-      stats.discipline += deltas.discipline || 0;
-      stats.patience += deltas.patience || 0;
-      stats.risk += deltas.risk || 0;
-      stats.emotion += deltas.emotion || 0;
-      stats.vision += deltas.vision || 0;
-    }
-
-    function getMindsetType(stats) {
-      const entries = [
-        ["discipline", stats.discipline],
-        ["patience", stats.patience],
-        ["risk", stats.risk],
-        ["emotion", stats.emotion],
-        ["vision", stats.vision]
-      ];
-      entries.sort((a, b) => b[1] - a[1]);
-      const [topKey, topValue] = entries[0];
-
-      if (topValue <= 0) {
-        return {
-          title: "Investor in Progress",
-          description: "You’re early in your mindset journey — and that’s completely okay. The fact you played this game already separates you from the version of you that ignores money and mindset entirely.",
-          advice: "Pick one tiny shift you liked from your choices and repeat it this week. You don’t need to change everything — just keep moving 1% at a time."
-        };
-      }
-
-      switch (topKey) {
-        case "discipline":
-          return {
-            title: "The Builder",
-            description: "You’re willing to do the work and make intentional decisions, even when it’s not glamorous.",
-            advice: "Make sure discipline doesn’t become self-punishment. Build systems that feel sustainable, not brutal."
-          };
-        case "patience":
-          return {
-            title: "The Long-Term Thinker",
-            description: "You understand that real wealth and real change take time.",
-            advice: "Combine your patience with small, consistent action so you don’t just wait — you advance."
-          };
-        case "risk":
-          return {
-            title: "The Strategist",
-            description: "You care about protecting your downside and avoiding chaos.",
-            advice: "Remember that controlled risk is still necessary for growth. Don’t let safety become stuckness."
-          };
-        case "emotion":
-          return {
-            title: "The Grounded One",
-            description: "You’re learning to manage your emotions around money instead of letting them run the show.",
-            advice: "Keep building emotional tools — breath, reflection, pauses — so big decisions feel calm, not chaotic."
-          };
-        case "vision":
-        default:
-          return {
-            title: "The Visionary",
-            description: "You see beyond right now and care deeply about your future self.",
-            advice: "Use that vision to design simple daily actions. Bring the future into your calendar, not just your imagination."
-          };
-      }
-    }
-
-    function formatStatValue(value) {
-      if (value > 0) return `+${value}`;
-      return `${value}`;
-    }
-
-    // RENDERING
-    function renderStartScreen() {
-      subtitleEl.textContent = "Every decision shapes your path. Grow your Wealth Orb through better choices.";
-      footerNoteEl.textContent = "Tap “Begin Your Path” and answer honestly. There’s no perfect score — just insight.";
-      const html = `
-        <div class="section fade-enter align-center">
-          <div class="section-header">Your Journey</div>
-          <p class="scenario-body mb-10">
-            This is a quick interactive mindset experience. You’ll face 20 real-life moments 
-            around money, emotions, and decisions. Some will be calm. A few will be under a 
-            3-second countdown.
-          </p>
-          <p class="scenario-body">
-            Answer as the <strong>real you today</strong>, not the perfect version. Your Wealth Orb will evolve as your decisions do.
-          </p>
-          <div class="btn-row mt-6">
-            <button class="btn-donate" id="startBtn">Begin Your Path</button>
-            <button class="btn-ghost" id="howBtn">How it works</button>
-          </div>
-        </div>
-      `;
-      contentEl.innerHTML = html;
-
-      document.getElementById("startBtn").onclick = () => {
-        state = "scenario";
-        index = 0;
-        renderScenario();
-      };
-
-      document.getElementById("howBtn").onclick = () => {
-        renderHowItWorks();
-      };
-    }
-
-    function renderHowItWorks() {
-      const html = `
-        <div class="section fade-enter">
-          <div class="section-header">How it Works</div>
-          <p class="scenario-body mb-10">
-            • <strong>20 scenarios</strong> — everyday money and mindset moments.<br>
-            • Your choices affect five traits: Discipline, Patience, Risk Control, Emotional Stability, and Long-Term Vision.<br>
-            • Twice, you’ll get a <strong>5-second countdown</strong> to test how you respond under pressure.
-          </p>
-          <p class="scenario-body mb-10">
-            At the end, you’ll see a <strong>Mindset Type</strong> and a reflection you can use to shape your real-life WealthPath.
-          </p>
-          <div class="btn-row">
-            <button class="btn-donate" id="backToStart">Back</button>
-          </div>
-        </div>
-      `;
-      contentEl.innerHTML = html;
-
-      document.getElementById("backToStart").onclick = () => {
-        renderStartScreen();
-      };
-    }
-
-    function renderScenario() {
-      clearTimer();
-      choiceLocked = false;
-      const scenario = scenarios[index];
-      const progressPercent = Math.round(((index) / TOTAL_SCENARIOS) * 100);
-
-      subtitleEl.textContent =
-        scenario.type === "timed"
-          ? "Pressure moment: respond before the countdown ends."
-          : "Breathe. Read. Answer like the real you.";
-
-      const typeLabel = scenario.type === "timed"
-        ? "Timed"
-        : scenario.type === "balanced"
-          ? "Real-Life Tension"
-          : "Reflection";
-
-      const typeHtml = `
-        <div class="pill-type">
-          <span class="pill-type-dot"></span>
-          ${typeLabel}
-        </div>
-      `;
-
-      
-let timerHtml = "";
-if (scenario.type === "timed") {
-  timerHtml = `<div class="timer-text" id="timerText">Time: ${scenario.timeLimit || 5}s</div>`;
-} else {
-  timerHtml = `<div class="timer-text" id="timerText"></div>`;
+<script>
+/* ---------------------------------------------------------
+   PARTICLES GENERATION
+--------------------------------------------------------- */
+function spawnParticles() {
+  const container = document.getElementById("particles");
+  for (let i = 0; i < 70; i++) {
+    const p = document.createElement("div");
+    p.classList.add("particle");
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.animationDuration = (6 + Math.random() * 10) + "s";
+    p.style.animationDelay = (-Math.random() * 8) + "s";
+    container.appendChild(p);
+  }
 }
-      let choicesHtml = scenario.choices
-        .map(
-          (choice, i) => `
-        <button class="btn-donate" data-choice="${i}">
-          ${choice.text}
-        </button>`
-        )
-        .join("");
+spawnParticles();
 
-      const html = `
-        <div class="section fade-enter">
-          <div class="footer-row mb-10">
-            <span style="font-size:0.78rem;color:var(--muted);">
-              Scenario ${index + 1} of ${TOTAL_SCENARIOS}
-            </span>
-            ${typeHtml}
-          </div>
-          ${timerHtml}
-          <h2 class="scenario-title">${scenario.title}</h2>
-          <p class="scenario-body">${scenario.text}</p>
-          <div class="choices btn-row">${choicesHtml}</div>
-          <div class="footer-row">
-            <div class="progress-line">
-              <div class="progress-fill" style="width:${progressPercent}%;"></div>
-            </div>
-            <span style="font-size:0.75rem;">${progressPercent}%</span>
-          </div>
-        </div>
-      `;
-      contentEl.innerHTML = html;
+/* ---------------------------------------------------------
+   GAME DATA
+--------------------------------------------------------- */
 
-      document.querySelectorAll(".btn-donate[data-choice]").forEach((btn) => {
-        btn.onclick = () => {
-          const idx = parseInt(btn.getAttribute("data-choice"), 10);
-          handleChoice(idx);
-        };
-      });
+let orbSize = 120;
+let orbStage = 0; // 0 = blue, 1 = teal, 2 = gold
 
-      if (scenario.type === "timed") {
-        startCountdown(scenario.timeLimit || 5);
+let attributes = {
+  focus: 0,
+  patience: 0,
+  consistency: 0,
+  mindset: 0,
+  risk: 0,
+  trajectory: 0
+};
+
+const levels = [
+  {
+    title: "Level 1 — Daily Focus",
+    questions: [
+      {
+        text: "It’s the start of your day. What’s the very first thing you do for your future self?",
+        choices: [
+          { label: "Check my phone, scroll for a bit.", effects: { focus: -1 } },
+          { label: "Write down 1–3 intentions for today.", effects: { focus: 4, mindset: 2 } },
+          { label: "Think about money but don’t take action.", effects: { mindset: 1 } }
+        ]
+      },
+      {
+        text: "You planned to read 10 pages about investing tonight, but Netflix is calling. What happens?",
+        choices: [
+          { label: "I still read, even if I’m a little tired.", effects: { consistency: 4, focus: 2 } },
+          { label: "I’ll do it tomorrow… probably.", effects: { consistency: 1 } },
+          { label: "Forget it. I’ve had a long day.", effects: { consistency: -1 } }
+        ]
+      },
+      {
+        text: "You sit down to work on your goals. What do you do with notifications?",
+        choices: [
+          { label: "Silent mode. My goals come first.", effects: { focus: 5 } },
+          { label: "Leave them on. I’ll just ‘ignore’ them.", effects: { focus: -1 } },
+          { label: "Check them every few minutes.", effects: { focus: -2 } }
+        ]
+      },
+      {
+        text: "You start thinking about your money. What’s your first honest thought?",
+        choices: [
+          { label: "I avoid checking because it stresses me out.", effects: { mindset: -1 } },
+          { label: "I’m not where I want to be, but I’m willing to learn.", effects: { mindset: 3 } },
+          { label: "I’m already planning how to level up.", effects: { mindset: 4, trajectory: 1 } }
+        ]
+      },
+      {
+        text: "How do you usually handle your to-do list?",
+        choices: [
+          { label: "I keep everything in my head and forget things.", effects: { focus: -1 } },
+          { label: "I write things down but rarely revisit them.", effects: { consistency: 1 } },
+          { label: "I write them down and check them off as I go.", effects: { consistency: 3, focus: 2 } }
+        ]
+      },
+      {
+        text: "When you feel overwhelmed, what’s your go-to response?",
+        choices: [
+          { label: "Shut down and do nothing.", effects: { mindset: -2 } },
+          { label: "Do one tiny task to keep momentum.", effects: { mindset: 3, consistency: 2 } },
+          { label: "Complain about it but don’t change anything.", effects: { mindset: -1 } }
+        ]
       }
+    ]
+  },
 
-      footerNoteEl.textContent =
-        scenario.type === "timed"
-          ? "Notice how your body feels when the timer appears — that’s the real training."
-          : "There’s no perfect choice here. Just notice which answer feels most like you right now.";
-    }
+  {
+    title: "Level 2 — Spending & Temptation",
+    questions: [
+      {
+        text: "You get an unexpected $100. What do you genuinely do?",
+        choices: [
+          { label: "Buy something I’ve been wanting right away.", effects: { patience: -1 } },
+          { label: "Split it: a little fun, a little saved/invested.", effects: { patience: 2, trajectory: 2 } },
+          { label: "Add it fully to savings or investments.", effects: { patience: 4, trajectory: 3 } }
+        ]
+      },
+      {
+        text: "There’s a sale: “50% OFF today only.” What’s your move?",
+        choices: [
+          { label: "If I didn’t plan for it, I skip it.", effects: { patience: 3, mindset: 2 } },
+          { label: "I buy it. It’s a ‘deal’, right?", effects: { trajectory: -1 } },
+          { label: "I put it in my cart but wait 24 hours.", effects: { patience: 2 } }
+        ]
+      },
+      {
+        text: "A friend invites you out to an expensive dinner last minute.",
+        choices: [
+          { label: "I go, even if it ruins my budget.", effects: { trajectory: -2 } },
+          { label: "I suggest something cheaper or another time.", effects: { mindset: 2, patience: 2 } },
+          { label: "I stay home and cook, no guilt.", effects: { patience: 3, focus: 1 } }
+        ]
+      },
+      {
+        text: "You see someone online flexing luxury purchases. What do you feel?",
+        choices: [
+          { label: "Jealousy. I feel behind.", effects: { mindset: -2 } },
+          { label: "Curious. I wonder what their real situation is.", effects: { mindset: 2 } },
+          { label: "Neutral. I’m focused on my own path.", effects: { mindset: 3, focus: 2 } }
+        ]
+      },
+      {
+        text: "When you swipe your card, how often do you check your balance?",
+        choices: [
+          { label: "Rarely. I don’t want to see it.", effects: { mindset: -2 } },
+          { label: "Sometimes, when I remember.", effects: { mindset: 1 } },
+          { label: "Often. I like to know where I stand.", effects: { mindset: 3, focus: 2 } }
+        ]
+      },
+      {
+        text: "You realize you’ve been ordering food a lot. What happens next?",
+        choices: [
+          { label: "I ignore it. It is what it is.", effects: { trajectory: -2 } },
+          { label: "I set a weekly limit and try again.", effects: { consistency: 2, patience: 2 } },
+          { label: "I plan simple meals I can actually stick to.", effects: { consistency: 3, mindset: 2 } }
+        ]
+      }
+    ]
+  },
 
-  function startCountdown(seconds) {
-  clearTimer(); // PREVENTS FAST TIMER BUG
-  timerRemaining = seconds;
+  {
+    title: "Level 3 — Emotions & The Market",
+    questions: [
+      {
+        text: "You finally start investing. The account drops a little the first week.",
+        choices: [
+          { label: "I’m annoyed, but I know it’s normal.", effects: { mindset: 3, risk: 1 } },
+          { label: "I instantly regret starting.", effects: { mindset: -2 } },
+          { label: "I want to add more, but carefully.", effects: { mindset: 3, risk: 2, trajectory: 1 } }
+        ]
+      },
+      {
+        text: "Someone tells you, “The stock market is basically gambling.”",
+        choices: [
+          { label: "Maybe they’re right, I shouldn’t invest.", effects: { mindset: -3 } },
+          { label: "I ask questions and do my own research.", effects: { mindset: 3, focus: 1 } },
+          { label: "I explain the difference between gambling and long-term investing.", effects: { mindset: 4, risk: 1 } }
+        ]
+      },
+      {
+        text: "Bad news hits the economy. What do you do with your investments?",
+        choices: [
+          { label: "Panic sell. I’m out.", effects: { risk: -4, trajectory: -3 } },
+          { label: "Do nothing, stick to the plan.", effects: { mindset: 3, patience: 3 } },
+          { label: "Check my allocations, maybe rebalance calmly.", effects: { mindset: 4, risk: 2 } }
+        ]
+      },
+      {
+        text: "Your portfolio is finally up. A lot.",
+        choices: [
+          { label: "Cash out everything immediately.", effects: { risk: -1, trajectory: -2 } },
+          { label: "Take a small amount, leave the rest invested.", effects: { trajectory: 2, patience: 1 } },
+          { label: "Stay the course—my plan matters more than short-term gains.", effects: { patience: 3, mindset: 3 } }
+        ]
+      },
+      {
+        text: "When you see red days in the market, what best describes you?",
+        choices: [
+          { label: "My emotions run the whole show.", effects: { risk: -2 } },
+          { label: "I feel nervous but I don’t react right away.", effects: { mindset: 2 } },
+          { label: "I see them as normal weather, not the whole climate.", effects: { mindset: 4, risk: 2 } }
+        ]
+      },
+      {
+        text: "If an investment goes down 20%, what’s your first move?",
+        choices: [
+          { label: "Blame myself and swear off investing.", effects: { mindset: -3 } },
+          { label: "Look at the bigger picture and time horizon.", effects: { mindset: 3, patience: 2 } },
+          { label: "Learn what happened and adjust if needed.", effects: { mindset: 4, focus: 1 } }
+        ]
+      }
+    ]
+  },
 
-  const timerTextEl = document.getElementById("timerText");
+  {
+    title: "Level 4 — Habits & Automation",
+    questions: [
+      {
+        text: "How do you currently approach saving or investing?",
+        choices: [
+          { label: "Randomly, when I ‘feel like it’.", effects: { consistency: -1 } },
+          { label: "I save/invest when extra money shows up.", effects: { consistency: 1 } },
+          { label: "I automate a set amount every month.", effects: { consistency: 4, trajectory: 3 } }
+        ]
+      },
+      {
+        text: "You get paid. What happens first?",
+        choices: [
+          { label: "Rent, bills, spending… then maybe saving.", effects: { trajectory: 0 } },
+          { label: "I move something into savings/investing first.", effects: { consistency: 3, trajectory: 3 } },
+          { label: "I let it sit and decide later.", effects: { consistency: -1 } }
+        ]
+      },
+      {
+        text: "You miss a contribution one month.",
+        choices: [
+          { label: "I say, ‘See? I knew I couldn’t stick to this.’", effects: { mindset: -2 } },
+          { label: "I acknowledge it and get back on track next month.", effects: { consistency: 3, mindset: 2 } },
+          { label: "I pause the plan entirely.", effects: { consistency: -3 } }
+        ]
+      },
+      {
+        text: "How do you usually learn about money?",
+        choices: [
+          { label: "Random TikToks or posts when they pop up.", effects: { focus: -1 } },
+          { label: "Occasional videos and articles when I remember.", effects: { focus: 1 } },
+          { label: "I intentionally follow creators or resources that teach me.", effects: { focus: 3, mindset: 2 } }
+        ]
+      },
+      {
+        text: "You start a new money habit. How long do you normally last?",
+        choices: [
+          { label: "A few days, then I fall off.", effects: { consistency: -2 } },
+          { label: "A few weeks, then I reset and try again.", effects: { consistency: 1, mindset: 1 } },
+          { label: "Months or longer—I’m learning to stick with things.", effects: { consistency: 4 } }
+        ]
+      },
+      {
+        text: "What’s your honest approach to tracking money?",
+        choices: [
+          { label: "I don’t track anything.", effects: { focus: -2 } },
+          { label: "I sometimes check, but it’s inconsistent.", effects: { focus: 1 } },
+          { label: "I check on a schedule (weekly/monthly).", effects: { focus: 3, consistency: 2 } }
+        ]
+      }
+    ]
+  },
 
-  // Always show accurate starting time
-  if (timerTextEl) {
-    timerTextEl.textContent = `Time: ${timerRemaining}s`;
+  {
+    title: "Level 5 — Risk & Goals",
+    questions: [
+      {
+        text: "How do you feel about taking risk with money?",
+        choices: [
+          { label: "I hate risk. I’d rather do nothing.", effects: { risk: -2, trajectory: -1 } },
+          { label: "I can handle some risk if there’s a plan.", effects: { risk: 2, mindset: 2 } },
+          { label: "I love risk, even if I don’t fully understand it.", effects: { risk: 1, trajectory: -1 } }
+        ]
+      },
+      {
+        text: "Someone pitches a ‘get rich quick’ scheme.",
+        choices: [
+          { label: "I’m tempted. Fast money sounds good.", effects: { risk: -2, trajectory: -2 } },
+          { label: "I ask a lot of questions and probably say no.", effects: { mindset: 3, risk: 2 } },
+          { label: "Hard pass. Slow and steady is my lane.", effects: { patience: 3, trajectory: 2 } }
+        ]
+      },
+      {
+        text: "How clear are your financial goals?",
+        choices: [
+          { label: "I don’t really have clear goals yet.", effects: { focus: -1 } },
+          { label: "I have a loose idea, but nothing written.", effects: { focus: 1, mindset: 1 } },
+          { label: "I know my goals and write them somewhere.", effects: { focus: 3, trajectory: 3 } }
+        ]
+      },
+      {
+        text: "You think about your ‘future self’ 10 years from now.",
+        choices: [
+          { label: "I rarely think that far ahead.", effects: { patience: -1 } },
+          { label: "Sometimes I do, but it feels blurry.", effects: { patience: 1 } },
+          { label: "I picture them clearly and try to act for them.", effects: { patience: 3, trajectory: 3 } }
+        ]
+      },
+      {
+        text: "If someone asked, “Why are you building wealth?”, your main answer is:",
+        choices: [
+          { label: "To prove people wrong.", effects: { mindset: 1 } },
+          { label: "To feel safer and more free.", effects: { mindset: 3, trajectory: 2 } },
+          { label: "I haven’t really thought about my ‘why’.", effects: { mindset: -1 } }
+        ]
+      },
+      {
+        text: "When a plan isn’t working fast enough, what do you do?",
+        choices: [
+          { label: "Quit and jump to a new idea.", effects: { consistency: -3 } },
+          { label: "Adjust the plan but keep the same goal.", effects: { consistency: 3, mindset: 2 } },
+          { label: "Blame the idea instead of my habits.", effects: { mindset: -1 } }
+        ]
+      }
+    ]
+  },
+
+  {
+    title: "Level 6 — Life Design & Identity",
+    questions: [
+      {
+        text: "When you say, “I’m learning about money,” how true is that day-to-day?",
+        choices: [
+          { label: "Mostly talk. I rarely take action.", effects: { consistency: -2 } },
+          { label: "I’m on and off, but I care.", effects: { consistency: 1, mindset: 2 } },
+          { label: "I really am learning and acting, even if it’s small.", effects: { consistency: 3, mindset: 3 } }
+        ]
+      },
+      {
+        text: "Your environment (friends, family, social media) mostly:",
+        choices: [
+          { label: "Pulls me away from long-term thinking.", effects: { mindset: -2 } },
+          { label: "Is mixed. Some supportive, some not.", effects: { mindset: 1 } },
+          { label: "Supports or inspires growth, or I’m creating that myself.", effects: { mindset: 3, focus: 2 } }
+        ]
+      },
+      {
+        text: "You get invited to something that doesn’t align with your priorities.",
+        choices: [
+          { label: "I go anyway. I don’t want to disappoint people.", effects: { focus: -1 } },
+          { label: "Sometimes I say no, but I feel guilty.", effects: { mindset: 1 } },
+          { label: "I say no calmly when it doesn’t fit my path.", effects: { focus: 3, patience: 1 } }
+        ]
+      },
+      {
+        text: "When you picture your ‘wealthy’ version of you, what stands out most?",
+        choices: [
+          { label: "The things I own.", effects: { mindset: -1 } },
+          { label: "Freedom, time, and peace.", effects: { mindset: 3, trajectory: 2 } },
+          { label: "Impact—who I can help and lift up.", effects: { mindset: 4, trajectory: 3 } }
+        ]
+      },
+      {
+        text: "A year from now, what do you want to be able to say about your habits?",
+        choices: [
+          { label: "I thought about change, but didn’t move much.", effects: { consistency: -2 } },
+          { label: "I started, stopped, and restarted—but I’m still here.", effects: { consistency: 2, mindset: 2 } },
+          { label: "I became the person who shows up for their future.", effects: { consistency: 4, mindset: 4, trajectory: 3 } }
+        ]
+      },
+      {
+        text: "Right now, in this moment, which truth feels most like you?",
+        choices: [
+          { label: "I’m not sure who I am with money yet.", effects: { mindset: 0 } },
+          { label: "I’m in the middle of rewriting my story.", effects: { mindset: 3, focus: 1 } },
+          { label: "I am becoming the person my future self will thank.", effects: { mindset: 4, trajectory: 3 } }
+        ]
+      }
+    ]
+  }
+];
+
+let currentLevel = 0;
+let currentQuestion = 0;
+let totalQuestions = 0;
+let answeredCount = 0;
+
+levels.forEach(level => {
+  totalQuestions += level.questions.length;
+});
+
+/* ---------------------------------------------------------
+   UPDATE ORB EVOLUTION
+--------------------------------------------------------- */
+function evolveOrb() {
+  orbSize += 6; // smaller growth per question since there are many
+  const orb = document.getElementById("orb");
+  orb.style.width = orbSize + "px";
+  orb.style.height = orbSize + "px";
+
+  // Color stage changes
+  if (orbSize > 160 && orbStage === 0) {
+    orbStage = 1;
+    orb.style.background =
+      `radial-gradient(circle at center, var(--teal), #0ddbb8, #0b9e84 70%)`;
+    orb.style.boxShadow = `0 0 30px var(--teal), 0 0 60px var(--teal)`;
   }
 
-  // EXACT 1-SECOND INTERVAL — FIXED
-  timerId = setInterval(() => {
-    timerRemaining--;
-
-    if (timerTextEl) {
-      timerTextEl.textContent =
-        timerRemaining > 0 ? `Time: ${timerRemaining}s` : "Time!";
-    }
-
-    if (timerRemaining <= 0) {
-      clearTimer();
-      if (!choiceLocked) {
-        handleChoice(null, true); // timed-out response
-      }
-    }
-  }, 1000);
+  if (orbSize > 210 && orbStage === 1) {
+    orbStage = 2;
+    orb.style.background =
+      `radial-gradient(circle at center, var(--gold), #eab308, #b45309 70%)`;
+    orb.style.boxShadow = `0 0 35px var(--gold), 0 0 70px var(--gold)`;
+  }
 }
 
-    function handleChoice(choiceIndex, timedOut = false) {
-      if (choiceLocked) return;
-      choiceLocked = true;
-      clearTimer();
+/* ---------------------------------------------------------
+   PROGRESS BAR
+--------------------------------------------------------- */
+function updateProgress() {
+  const label = document.getElementById("progress-label");
+  const fill = document.getElementById("progress-fill");
+  label.textContent = `Question ${answeredCount} of ${totalQuestions}`;
+  const pct = (answeredCount / totalQuestions) * 100;
+  fill.style.width = pct + "%";
+}
 
-      const scenario = scenarios[index];
-      if (timedOut) {
-        lastChoiceText = "You froze and didn’t choose in time.";
-        lastReflection = "Freezing is still a decision — it gives the moment your power. Practicing small, calm responses builds your confidence for the bigger ones.";
-        lastDeltas = { discipline: -1, patience: -1, risk: -1, emotion: -2, vision: -1 };
-        applyDeltas(lastDeltas);
-      } else {
-        const choice = scenario.choices[choiceIndex];
-        lastChoiceText = choice.text;
-        lastReflection = choice.reflection;
-        lastDeltas = choice.deltas || null;
-        applyDeltas(lastDeltas);
-      }
+/* ---------------------------------------------------------
+   RENDER QUESTION
+--------------------------------------------------------- */
+function renderQuestion() {
+  if (currentLevel >= levels.length) {
+    endGame();
+    return;
+  }
 
-      updateOrbLevel();
-      state = "reflection";
-      renderReflection();
+  const level = levels[currentLevel];
+  const question = level.questions[currentQuestion];
+
+  document.getElementById("level-title").innerText = level.title;
+  document.getElementById("question-text").innerText = question.text;
+
+  const choiceBox = document.getElementById("choices");
+  choiceBox.innerHTML = "";
+
+  question.choices.forEach((choice, i) => {
+    const btn = document.createElement("div");
+    btn.classList.add("choice-btn");
+
+    btn.innerHTML = `
+      <button class="button" onclick="selectChoice(${i})">
+        <div class="blob1"></div>
+        <div class="blob2"></div>
+        <div class="inner">${choice.label}</div>
+      </button>
+    `;
+
+    choiceBox.appendChild(btn);
+  });
+}
+
+/* ---------------------------------------------------------
+   LEVEL TRANSITION
+--------------------------------------------------------- */
+function showLevelTransition(nextTitle) {
+  const transitionOuter = document.getElementById("level-transition");
+  const transitionInner = document.getElementById("level-transition-inner");
+  transitionInner.textContent = `Next: ${nextTitle}`;
+  document.body.classList.add("show-level-transition");
+
+  setTimeout(() => {
+    document.body.classList.remove("show-level-transition");
+    renderQuestion();
+  }, 900);
+}
+
+/* ---------------------------------------------------------
+   HANDLE CHOICE
+--------------------------------------------------------- */
+function selectChoice(index) {
+  const level = levels[currentLevel];
+  const question = level.questions[currentQuestion];
+  const choice = question.choices[index];
+
+  // Apply attribute effects
+  for (let key in choice.effects) {
+    attributes[key] += choice.effects[key];
+  }
+
+  // Increase answered count + progress
+  answeredCount++;
+  updateProgress();
+
+  // Evolve orb
+  evolveOrb();
+
+  const isLastQuestionInLevel = currentQuestion === level.questions.length - 1;
+
+  if (isLastQuestionInLevel) {
+    currentLevel++;
+    currentQuestion = 0;
+
+    if (currentLevel >= levels.length) {
+      endGame();
+      return;
     }
 
-    function renderReflection() {
-      const scenario = scenarios[index];
-      const progressPercent = Math.round(((index + 1) / TOTAL_SCENARIOS) * 100);
+    // Show level transition for next level
+    const nextTitle = levels[currentLevel].title;
+    showLevelTransition(nextTitle);
+  } else {
+    currentQuestion++;
+    renderQuestion();
+  }
+}
 
-      const deltas = lastDeltas || {
-        discipline: 0,
-        patience: 0,
-        risk: 0,
-        emotion: 0,
-        vision: 0
-      };
+/* ---------------------------------------------------------
+   END GAME
+--------------------------------------------------------- */
+function endGame() {
+  document.getElementById("choices").style.display = "none";
+  document.getElementById("question-text").style.display = "none";
+  document.getElementById("level-title").style.display = "none";
 
-      const html = `
-        <div class="section fade-enter">
-          <div class="section-header">Your Choice</div>
-          <p class="scenario-body mb-10">
-            <strong>${scenario.title}:</strong><br>
-            <span style="color:var(--muted);">${lastChoiceText}</span>
-          </p>
-          <p class="reflection-text">${lastReflection}</p>
+  const final = document.getElementById("final-summary");
 
-          <div class="stats-row">
-            <div class="stat-pill">
-              <strong>Discipline</strong> ${formatStatValue(deltas.discipline)}
-            </div>
-            <div class="stat-pill">
-              <strong>Patience</strong> ${formatStatValue(deltas.patience)}
-            </div>
-            <div class="stat-pill">
-              <strong>Risk Control</strong> ${formatStatValue(deltas.risk)}
-            </div>
-            <div class="stat-pill">
-              <strong>Emotional Stability</strong> ${formatStatValue(deltas.emotion)}
-            </div>
-            <div class="stat-pill">
-              <strong>Long-Term Vision</strong> ${formatStatValue(deltas.vision)}
-            </div>
-          </div>
+  let mindsetLabel = "In Progress";
+  const totalMindset = attributes.mindset + attributes.focus + attributes.consistency + attributes.patience;
 
-          <div class="footer-row">
-            <div class="progress-line">
-              <div class="progress-fill" style="width:${progressPercent}%;"></div>
-            </div>
-            <span style="font-size:0.75rem;">${progressPercent}%</span>
-          </div>
+  if (totalMindset >= 40) mindsetLabel = "Wealth Architect";
+  else if (totalMindset >= 30) mindsetLabel = "Future Builder";
+  else if (totalMindset >= 20) mindsetLabel = "Intentional Learner";
+  else mindsetLabel = "Just Getting Started";
 
-          <div class="btn-row mt-6">
-            <button class="btn-donate" id="continueBtn">
-              Continue Path
-            </button>
-          </div>
-        </div>
-      `;
-      contentEl.innerHTML = html;
+  const summary = `
+    <strong>Focus:</strong> ${attributes.focus}<br>
+    <strong>Patience:</strong> ${attributes.patience}<br>
+    <strong>Consistency:</strong> ${attributes.consistency}<br>
+    <strong>Mindset Strength:</strong> ${attributes.mindset}<br>
+    <strong>Risk Comfort:</strong> ${attributes.risk}<br>
+    <strong>Wealth Trajectory:</strong> ${attributes.trajectory}<br><br>
 
-      document.getElementById("continueBtn").onclick = () => {
-        nextScenario();
-      };
+    Your mindset profile: <strong>${mindsetLabel}</strong><br><br>
+    Your answers weren’t about being perfect—they were about being honest.<br>
+    Every question you faced is a moment you’ll see again in real life.<br><br>
+    <strong>Your choices are already compounding.</strong><br>
+    This is WealthPath.
+  `;
 
-      footerNoteEl.textContent =
-        "Notice how the reflection feels in your body — that’s where mindset actually lives.";
-    }
+  final.innerHTML = summary;
+  document.getElementById("final-screen").style.display = "block";
+}
 
-    function renderFinalScreen() {
-      const mindset = getMindsetType(stats);
-      subtitleEl.textContent = "Session complete. This isn’t a grade — it’s a mirror.";
-      footerNoteEl.textContent =
-        "You can replay any time. Different days, different choices, deeper awareness.";
+/* ---------------------------------------------------------
+   INTRO START
+--------------------------------------------------------- */
+function startGameFromIntro() {
+  const intro = document.getElementById("intro-overlay");
+  intro.classList.add("fade-out");
 
-      const html = `
-        <div class="section fade-enter">
-          <div class="section-header">Your Mindset Snapshot</div>
-          <h2 class="scenario-title">${mindset.title}</h2>
-          <p class="scenario-body mb-10">
-            ${mindset.description}
-          </p>
-          <p class="scenario-body mb-10">
-            <strong>Guidance:</strong> ${mindset.advice}
-          </p>
+  // Initialize progress label
+  answeredCount = 0;
+  updateProgress();
 
-          <div class="section-header">Your Traits</div>
-          <div class="stats-row">
-            <div class="stat-pill">
-              <strong>Discipline:</strong> ${stats.discipline}
-            </div>
-            <div class="stat-pill">
-              <strong>Patience:</strong> ${stats.patience}
-            </div>
-            <div class="stat-pill">
-              <strong>Risk Control:</strong> ${stats.risk}
-            </div>
-            <div class="stat-pill">
-              <strong>Emotional Stability:</strong> ${stats.emotion}
-            </div>
-            <div class="stat-pill">
-              <strong>Long-Term Vision:</strong> ${stats.vision}
-            </div>
-          </div>
+  setTimeout(() => {
+    intro.style.display = "none";
+    renderQuestion();
+  }, 700);
+}
+</script>
 
-          <p class="footer-small" style="margin-top:10px;">
-            This is a snapshot of <strong>today’s mindset</strong>. Every new choice you make can shift this picture.
-          </p>
-
-          <div class="btn-row mt-6">
-            <button class="btn-donate" id="replayBtn">Play Again</button>
-          </div>
-        </div>
-      `;
-      contentEl.innerHTML = html;
-
-      document.getElementById("replayBtn").onclick = () => {
-        resetGame();
-      };
-    }
-
-    // INIT
-    resetGame();
-  </script>
 </body>
 </html>
