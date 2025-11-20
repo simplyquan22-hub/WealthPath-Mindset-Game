@@ -509,22 +509,27 @@ body {
    Ideally, replace these URLs with local files or valid URLs.
 --------------------------------------------------------- */
 // You can download simple free sounds from Pixabay.com
-const audioClick = new Audio('');   // e.g. 'sounds/click.mp3'
-const audioGood  = new Audio('');   // e.g. 'sounds/chime.mp3'
-const audioBad   = new Audio('');   // e.g. 'sounds/thud.mp3'
-const audioWin   = new Audio('');   // e.g. 'sounds/levelup.mp3'
+/* ---------------------------------------------------------
+   AUDIO CONFIGURATION
+--------------------------------------------------------- */
+// The paths below are now correct and match your files!
+const audioClick = new Audio('sounds/click.mp3'); 
+const audioGood  = new Audio('sounds/good.mp3');   
+const audioBad   = new Audio('sounds/bad.mp3');   
+const audioWin   = new Audio('sounds/win.mp3');   
 
-// Adjust volume
+// Volume Settings
 audioClick.volume = 0.3;
 audioGood.volume = 0.4;
 audioBad.volume = 0.4;
+audioWin.volume = 0.5;
 
 function playSound(type) {
-  // Simple check to see if src is set before playing
-  if (type === 'click' && audioClick.src) audioClick.play().catch(e=>{});
-  if (type === 'good' && audioGood.src) { audioGood.currentTime=0; audioGood.play().catch(e=>{}); }
-  if (type === 'bad' && audioBad.src) { audioBad.currentTime=0; audioBad.play().catch(e=>{}); }
-  if (type === 'win' && audioWin.src) { audioWin.currentTime=0; audioWin.play().catch(e=>{}); }
+  // Using cloneNode(true) allows rapid clicks/effects to overlap
+  if (type === 'click') audioClick.cloneNode(true).play().catch(e=>{});
+  if (type === 'good')  audioGood.cloneNode(true).play().catch(e=>{});
+  if (type === 'bad')   audioBad.cloneNode(true).play().catch(e=>{});
+  if (type === 'win')   audioWin.cloneNode(true).play().catch(e=>{});
 }
 
 /* ---------------------------------------------------------
