@@ -1141,7 +1141,7 @@ function selectChoice(index) {
     const question = level.questions[currentQuestion];
     const choice = question.choices[index];
     const orb = document.getElementById("orb");
-    const allButtons = document.querySelectorAll('.button');
+    const allButtons = document.querySelectorAll('#choices .button');
     const clickedButton = allButtons[index];
     
     // Play the button click sound immediately
