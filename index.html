@@ -568,7 +568,7 @@ body {
         <div id="final-next-step" style="margin-top: 20px; color: var(--blue); font-weight: 600;"></div>
 
         <div class="choice-btn" style="margin-top: 20px;">
-            <button class="button" onclick="location.reload()">
+            <button class="button" onclick="resetGame()">
                 <div class="blob1"></div>
                 <div class="inner">Play Again</div>
             </button>
@@ -1239,6 +1239,48 @@ function startGameFromIntro() {
         renderQuestion();
         updateProgress();
     }, 700);
+}
+function resetGame() {
+    // Reset core variables
+    currentLevel = 0;
+    currentQuestion = 0;
+    answeredCount = 0;
+    orbSize = 120;
+    orbStage = 0;
+
+    // Reset attributes
+    attributes = {
+        focus: 0,
+        patience: 0,
+        consistency: 0,
+        mindset: 0,
+        risk: 0,
+        trajectory: 0
+    };
+
+    // Hide final screen
+    document.getElementById("final-screen").style.display = "none";
+
+    // Show game UI again
+    document.getElementById("level-title").style.display = "block";
+    document.getElementById("question-text").style.display = "block";
+    document.getElementById("choices").style.display = "block";
+    document.getElementById("progress-wrapper").style.display = "block";
+    document.getElementById("orb").style.display = "block";
+
+    // Reset orb size & color
+    const orb = document.getElementById("orb");
+    orb.style.width = "120px";
+    orb.style.height = "120px";
+    orb.classList.remove("stage-1", "stage-2");
+    orb.classList.add("stage-0");
+
+    // Reset UI text
+    document.getElementById("progress-label").textContent = "Question 0 of " + totalQuestions;
+
+    // Restart first question
+    renderQuestion();
+    updateProgress();
 }
 
 function endGame() {
