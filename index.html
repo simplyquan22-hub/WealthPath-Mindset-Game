@@ -1019,7 +1019,60 @@ const levels = [
                 ]
             }
         ]
-    }
+    },
+    {
+    title: "Level 7 — Deep Reflection Mode",
+    questions: [
+        {
+            text: "If your future self could speak to you today, which truth would they want you to hear the most?",
+            choices: [
+                { label: "“Your past is loud, but your future can be louder.”", effects: { mindset: 4, trajectory: 3 } },
+                { label: "“You’re holding on to things that no longer serve you.”", effects: { mindset: 3, focus: 1 } },
+                { label: "“Stop avoiding the work you already know you need to do.”", effects: { consistency: 3, mindset: 2 } }
+            ]
+        },
+        {
+            text: "What's the emotional pattern that quietly shapes most of your money decisions?",
+            choices: [
+                { label: "Fear of not being enough.", effects: { mindset: -1, risk: -1 } },
+                { label: "Hope that things will work out if I stay consistent.", effects: { consistency: 3, mindset: 2 } },
+                { label: "A commitment to become someone future-me is proud of.", effects: { trajectory: 3, mindset: 3 } }
+            ]
+        },
+        {
+            text: "Which inner belief has the strongest influence over your financial habits?",
+            choices: [
+                { label: "“I don’t trust myself to stay disciplined.”", effects: { consistency: -2 } },
+                { label: "“I’m capable, but I need clarity and structure.”", effects: { focus: 2, mindset: 2 } },
+                { label: "“I can build the future I imagine, even if my growth is slow.”", effects: { patience: 3, trajectory: 2 } }
+            ]
+        },
+        {
+            text: "When you imagine the highest version of yourself, what do they consistently do?",
+            choices: [
+                { label: "Avoid distractions and focus deeply.", effects: { focus: 4 } },
+                { label: "Take ownership of their habits and emotions.", effects: { mindset: 4, consistency: 2 } },
+                { label: "Act with long-term intention instead of impulses.", effects: { patience: 4, trajectory: 2 } }
+            ]
+        },
+        {
+            text: "What truth about your life do you avoid because it forces growth?",
+            choices: [
+                { label: "My excuses are louder than my effort.", effects: { consistency: -2, mindset: -1 } },
+                { label: "I’m capable of more than I currently give myself.", effects: { mindset: 3, focus: 1 } },
+                { label: "No one is stopping me but the habits I allow.", effects: { consistency: 3, trajectory: 2 } }
+            ]
+        },
+        {
+            text: "What emotional shift would change your relationship with money the most?",
+            choices: [
+                { label: "Letting go of fear and trusting slow progress.", effects: { patience: 3, risk: 2 } },
+                { label: "Stopping the cycle of self-doubt.", effects: { mindset: 4 } },
+                { label: "Choosing discipline over temporary comfort.", effects: { consistency: 4, focus: 2 } }
+            ]
+        }
+    ]
+}
 ];
 
 let currentLevel = 0;
@@ -1306,11 +1359,12 @@ function resetGame() {
     document.getElementById("orb").style.display = "block";
 
     // Reset orb size & color
-    const orb = document.getElementById("orb");
-    orb.style.width = "120px";
-    orb.style.height = "120px";
-    orb.classList.remove("stage-1", "stage-2");
-    orb.classList.add("stage-0");
+    // Reset orb size & color
+const orb = document.getElementById("orb");
+orb.style.width = "120px";
+orb.style.height = "120px";
+orb.classList.remove("stage-1", "stage-2", "stage-3");
+orb.classList.add("stage-0");
 
     // Reset UI text
     document.getElementById("progress-label").textContent = "Question 0 of " + totalQuestions;
