@@ -1058,9 +1058,8 @@ function updateProgress() {
     const pct = (answeredCount / totalQuestions) * 100;
     fill.style.width = pct + "%";
 }
-
 /* ---------------------------------------------------------
-    RENDER QUESTION
+    REVISED RENDER QUESTION (Includes Randomization Fix)
 --------------------------------------------------------- */
 function renderQuestion() {
     if (currentLevel >= levels.length) {
@@ -1077,12 +1076,26 @@ function renderQuestion() {
     const choiceBox = document.getElementById("choices");
     choiceBox.innerHTML = "";
 
-    question.choices.forEach((choice, i) => {
+    // 1. Create an array of original indices (0, 1, 2...)
+    const originalIndices = question.choices.map((_, i) => i);
+
+    // 2. Shuffle the indices (Fisher-Yates)
+    for (let i = originalIndices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [originalIndices[i], originalIndices[j]] = [originalIndices[j], originalIndices[i]];
+    }
+
+    // 3. Render buttons using the shuffled indices
+    originalIndices.forEach(originalIndex => {
+        // Use the originalIndex to pull the correct data from the static array
+        const choice = question.choices[originalIndex]; 
+        
         const btn = document.createElement("div");
         btn.classList.add("choice-btn");
 
+        // IMPORTANT: The onclick handler uses the originalIndex to map the score correctly.
         btn.innerHTML = `
-            <button class="button" onclick="selectChoice(${i})" style="border: 2px solid transparent;">
+            <button class="button" onclick="selectChoice(${originalIndex})" style="border: 2px solid transparent;">
                 <div class="blob1"></div>
                 <div class="blob2"></div>
                 <div class="inner">${choice.label}</div>
