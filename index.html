@@ -239,6 +239,10 @@ body {
     background: radial-gradient(circle at center, var(--gold), #eab308, #b45309 70%);
     box-shadow: 0 0 35px var(--gold), 0 0 70px var(--gold);
 }
+#orb.stage-3 {
+    background: radial-gradient(circle at center, #a855f7, #9333ea, #6b21a8 70%);
+    box-shadow: 0 0 40px #a855f7, 0 0 90px #a855f7;
+}
 
 /* Orb Flash on Good Answer */
 .orb-good-flash {
@@ -580,28 +584,36 @@ body {
 
 <script>
 /* ---------------------------------------------------------
-    AUDIO CONFIGURATION (Optimized for GitHub Pages)
+    INSTANT AUDIO SYSTEM (iOS-Optimized)
 --------------------------------------------------------- */
-// Since your site is hosted on GitHub Pages, the relative path 
-// 'sounds/filename.mp3' will resolve correctly.
-const audioClick = new Audio('sounds/click.mp3'); 
-const audioGood  = new Audio('sounds/good.mp3');   
-const audioBad   = new Audio('sounds/bad.mp3');   
-const audioWin   = new Audio('sounds/win.mp3');   
+function loadSound(src) {
+    const audio = new Audio(src);
+    audio.preload = "auto";
+    audio.load();
+    return audio;
+}
 
-// Volume Settings
+const audioClick = loadSound('sounds/click.mp3');
+const audioGood  = loadSound('sounds/good.mp3');
+const audioBad   = loadSound('sounds/bad.mp3');
+const audioWin   = loadSound('sounds/win.mp3');
+
+// Optional: keep your same volumes
 audioClick.volume = 0.3;
-audioGood.volume = 0.4;
-audioBad.volume = 0.4;
-audioWin.volume = 0.5;
+audioGood.volume  = 0.4;
+audioBad.volume   = 0.4;
+audioWin.volume   = 0.5;
 
 function playSound(type) {
-  // Using cloneNode(true) allows rapid clicks/effects to overlap
-  // The .catch(e=>{}) handles the browser security policy preventing autoplay on first click.
-  if (type === 'click') audioClick.cloneNode(true).play().catch(e=>{});
-  if (type === 'good')  audioGood.cloneNode(true).play().catch(e=>{});
-  if (type === 'bad')   audioBad.cloneNode(true).play().catch(e=>{});
-  if (type === 'win')   audioWin.cloneNode(true).play().catch(e=>{});
+    let audio;
+    if (type === "click") audio = audioClick;
+    if (type === "good")  audio = audioGood;
+    if (type === "bad")   audio = audioBad;
+    if (type === "win")   audio = audioWin;
+
+    const s = audio.cloneNode(true);
+    s.volume = audio.volume;
+    s.play().catch(() => {}); // iOS safety
 }
 
 /* ---------------------------------------------------------
@@ -1046,6 +1058,15 @@ function evolveOrb() {
         playSound('win');
         triggerConfetti();
     }
+}
+// NEW 3rd color stage
+if (orbSize > 260 && orbStage === 2) {
+    orbStage = 3;
+    orb.classList.remove('stage-2');
+    orb.classList.add('stage-3');
+
+    playSound('win');
+    triggerConfetti();
 }
 
 /* ---------------------------------------------------------
