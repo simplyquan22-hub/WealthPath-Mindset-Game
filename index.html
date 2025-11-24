@@ -1438,48 +1438,55 @@ function endGame() {
     }
     scoresListEl.innerHTML = scoresHTML;
 
-  // 4. Actionable Next Step (Based on the lowest score)
+// 4. Actionable Next Step (Based on the lowest score)
 if (weakestAttribute === 'Focus') {
-    nextStepEl.innerHTML = `🎯 <strong>Your next step:</strong>  
-    Create 10 minutes of intentional stillness each day.  
-    In that space, reconnect with what truly matters—  
-    and let your attention return to the path you’re building.`;
+    nextStepEl.innerHTML = `
+    🎯 <strong>Your next step:</strong><br>
+    Create 10 minutes of intentional stillness each day.<br>
+    In that space, reconnect with what truly matters—<br>
+    and let your attention return to the path you're building.`;
 }
 
 else if (weakestAttribute === 'Consistency') {
-    nextStepEl.innerHTML = `🔁 <strong>Your next step:</strong>  
-    Choose one action so small it feels impossible to fail.  
-    Show up for it daily.  
+    nextStepEl.innerHTML = `
+    🔁 <strong>Your next step:</strong><br>
+    Choose one action so small it feels impossible to fail.<br>
+    Show up for it daily.<br>
     The person you become will matter more than the task itself.`;
 }
 
 else if (weakestAttribute === 'Patience') {
-    nextStepEl.innerHTML = `⏳ <strong>Your next step:</strong>  
-    When you feel the urge to rush, pause.  
-    Breathe.  
-    Remember that growth is happening even when you can’t see it—  
+    nextStepEl.innerHTML = `
+    ⏳ <strong>Your next step:</strong><br>
+    When you feel the urge to rush, pause.<br>
+    Breathe.<br>
+    Remember that growth is happening even when you can’t see it—<br>
     and your future self is already thanking you.`;
 }
 
 else if (weakestAttribute === 'Mindset') {
-    nextStepEl.innerHTML = `🧠 <strong>Your next step:</strong>  
-    Notice one limiting belief you repeat—and gently challenge it.  
-    Rewrite it in the voice of your future self  
+    nextStepEl.innerHTML = `
+    🧠 <strong>Your next step:</strong><br>
+    Notice one limiting belief you repeat—and gently challenge it.<br>
+    Rewrite it in the voice of your future self,<br>
     and carry that truth into tomorrow.`;
 }
 
 else if (weakestAttribute === 'Risk') {
-    nextStepEl.innerHTML = `⚖️ <strong>Your next step:</strong>  
-    Instead of fearing uncertainty, explore it.  
-    Spend a few minutes learning one principle that makes money feel less intimidating  
+    nextStepEl.innerHTML = `
+    ⚖️ <strong>Your next step:</strong><br>
+    Instead of fearing uncertainty, explore it.<br>
+    Spend a few minutes learning one principle that makes money feel less intimidating,<br>
     and more like a tool you can command.`;
 }
 
 else if (weakestAttribute === 'Trajectory') {
-    nextStepEl.innerHTML = `🔭 <strong>Your next step:</strong>  
-    Define the version of you you’re becoming.  
-    Write one sentence about who that person is  
+    nextStepEl.innerHTML = `
+    🔭 <strong>Your next step:</strong><br>
+    Define the version of you you are becoming.<br>
+    Write one sentence about who that person is,<br>
     and one action you can take this week to move toward them.`;
+}
 }
 function renderChart() {
     const ctx = document.getElementById('statsChart').getContext('2d');
