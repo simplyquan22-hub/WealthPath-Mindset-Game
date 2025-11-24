@@ -1040,7 +1040,7 @@ function evolveOrb() {
     orb.style.width = orbSize + "px";
     orb.style.height = orbSize + "px";
 
-    // Color stage changes
+    // Stage 0 → 1
     if (orbSize > 160 && orbStage === 0) {
         orbStage = 1;
         orb.classList.remove('stage-0');
@@ -1050,6 +1050,7 @@ function evolveOrb() {
         triggerConfetti();
     }
 
+    // Stage 1 → 2
     if (orbSize > 210 && orbStage === 1) {
         orbStage = 2;
         orb.classList.remove('stage-1');
@@ -1058,15 +1059,16 @@ function evolveOrb() {
         playSound('win');
         triggerConfetti();
     }
-}
-// NEW 3rd color stage
-if (orbSize > 260 && orbStage === 2) {
-    orbStage = 3;
-    orb.classList.remove('stage-2');
-    orb.classList.add('stage-3');
 
-    playSound('win');
-    triggerConfetti();
+    // ⭐ Stage 2 → 3 (Purple)
+    if (orbSize > 260 && orbStage === 2) {
+        orbStage = 3;
+        orb.classList.remove('stage-2');
+        orb.classList.add('stage-3');
+
+        playSound('win');
+        triggerConfetti();
+    }
 }
 
 /* ---------------------------------------------------------
