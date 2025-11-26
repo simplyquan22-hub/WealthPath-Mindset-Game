@@ -524,7 +524,7 @@ body {
         </div>
 
         <div id="intro-btn" class="choice-btn">
-           <button class="button" onclick="playMagicChime(); startGameFromIntro()">
+          <button class="button" onclick="startGameFromIntro()">
                 <div class="blob1"></div>
                 <div class="blob2"></div>
                 <div class="inner">Begin Your Journey</div>
@@ -597,8 +597,6 @@ const audioClick = loadSound('sounds/click.mp3');
 const audioGood  = loadSound('sounds/good.mp3');
 const audioBad   = loadSound('sounds/bad.mp3');
 const audioWin   = loadSound('sounds/win.mp3');
-const audioMagic = loadSound('sounds/magic.mp3');
-audioMagic.volume = 0.55;
 
 // Optional: keep your same volumes
 audioClick.volume = 0.3;
@@ -612,13 +610,6 @@ function playSound(type) {
     if (type === "good")  audio = audioGood;
     if (type === "bad")   audio = audioBad;
     if (type === "win")   audio = audioWin;
-    }
-    
-    function playMagicChime() {
-    const s = audioMagic.cloneNode(true);
-    s.volume = audioMagic.volume;
-    s.play().catch(()=>{});
-}
 
     const s = audio.cloneNode(true);
     s.volume = audio.volume;
