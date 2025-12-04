@@ -97,17 +97,30 @@ body {
 }
 
 #intro-logo {
-    width: 72px;
-    height: 72px;
-    border-radius: 999px;
+    width: 120px;
+    height: 120px;
     margin: 0 auto 16px auto;
-    background: radial-gradient(circle at center, var(--gold), #eab308, #854d0e);
-    box-shadow: 0 0 35px rgba(250,204,21,0.8);
+
+    background-image: url('images/wp-logo.png'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    border-radius: 50%;
+
+    /* ✨ WealthPath Blue Glow Behind Logo */
+    box-shadow:
+        0 0 35px rgba(56, 189, 248, 0.45),   /* outer glow */
+        0 0 70px rgba(56, 189, 248, 0.25),   /* soft spread */
+        0 0 120px rgba(56, 189, 248, 0.18);  /* cinematic halo */
 }
 
 #intro-title {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.6rem;
+    font-size: 1.9rem;        /* bigger */
+    font-weight: 800;         /* MUCH bolder */
+    letter-spacing: -0.5px;   /* tighter premium look */
+    color: #ffffff;           /* brighter */
     margin-bottom: 8px;
 }
 
