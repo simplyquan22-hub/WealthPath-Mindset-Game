@@ -619,6 +619,8 @@ const audioClick = loadSound('sounds/click.mp3');
 const audioGood  = loadSound('sounds/good.mp3');
 const audioBad   = loadSound('sounds/bad.mp3');
 const audioWin   = loadSound('sounds/win.mp3');
+const audioIntro = loadSound('sounds/intro.mp3');
+audioIntro.volume = 0.5;
 
 // Optional: keep your same volumes
 audioClick.volume = 0.3;
@@ -1345,6 +1347,7 @@ function startGameFromIntro() {
     const intro = document.getElementById("intro-overlay");
     intro.classList.add("fade-out");
     playSound('click');
+    audioIntro.play().catch(() => {});
     
     setTimeout(() => {
         intro.style.display = "none";
