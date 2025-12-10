@@ -292,7 +292,15 @@ body {
     background: radial-gradient(circle at center, var(--gold), #eab308, #b45309 70%);
     box-shadow: 0 0 35px var(--gold), 0 0 70px var(--gold);
 }
+
+/* NEW Deep Blue Stage (Stage 3) */
 #orb.stage-3 {
+    background: radial-gradient(circle at center, #1e3a8a, #1e40af, #0f172a 70%);
+    box-shadow: 0 0 45px #1e3a8a, 0 0 110px #1e3a8a;
+}
+
+/* Your final purple evolution (Stage 4) stays the same */
+#orb.stage-4 {
     background: radial-gradient(circle at center, #a855f7, #9333ea, #6b21a8 70%);
     box-shadow: 0 0 40px #a855f7, 0 0 90px #a855f7;
 }
@@ -1207,7 +1215,7 @@ levels.forEach(level => {
 });
 
 /* ---------------------------------------------------------
-    UPDATE ORB EVOLUTION
+    UPDATE ORB EVOLUTION (FIXED)
 --------------------------------------------------------- */
 function evolveOrb() {
     orbSize += 6;    
@@ -1215,7 +1223,7 @@ function evolveOrb() {
     orb.style.width = orbSize + "px";
     orb.style.height = orbSize + "px";
 
-    // Stage 0 → 1
+    // Stage 0 → 1 (Teal)
     if (orbSize > 160 && orbStage === 0) {
         orbStage = 1;
         orb.classList.remove('stage-0');
@@ -1225,7 +1233,7 @@ function evolveOrb() {
         triggerConfetti();
     }
 
-    // Stage 1 → 2
+    // Stage 1 → 2 (Gold)
     if (orbSize > 210 && orbStage === 1) {
         orbStage = 2;
         orb.classList.remove('stage-1');
@@ -1235,7 +1243,7 @@ function evolveOrb() {
         triggerConfetti();
     }
 
-    // ⭐ Stage 2 → 3 (Purple)
+    // Stage 2 → 3 (Deep Blue)
     if (orbSize > 260 && orbStage === 2) {
         orbStage = 3;
         orb.classList.remove('stage-2');
@@ -1244,8 +1252,17 @@ function evolveOrb() {
         playSound('win');
         triggerConfetti();
     }
-}
 
+    // ⭐ NEW — Stage 3 → 4 (Purple Final Form)
+    if (orbSize > 320 && orbStage === 3) {
+        orbStage = 4;
+        orb.classList.remove('stage-3');
+        orb.classList.add('stage-4');
+
+        playSound('win');
+        triggerConfetti();
+    }
+}
 /* ---------------------------------------------------------
     PROGRESS BAR
 --------------------------------------------------------- */
@@ -1527,25 +1544,46 @@ function endGame() {
     let weakestAttribute = '';
     let scoresHTML = "";
 
-    // Archetype logic
-    if (attributes.mindset > 15 && attributes.consistency > 10) {
-        archetypeTitle = `<strong>The Architect.</strong>`;
-        archetypeSubtitle = `Master of Habits.`;
-        summaryHTML = `You have built a rock-solid foundation. Your mindset is your greatest asset, and your consistency ensures you will reach your goals.`;
-    } else if (attributes.risk > 10 && attributes.trajectory > 10) {
-        archetypeTitle = `<strong>The Visionary.</strong>`;
-        archetypeSubtitle = `The Calculated Builder.`;
-        summaryHTML = `You are willing to take calculated risks and have your eyes on the big picture. Watch your patience, but trust your gut.`;
-    } else if (attributes.focus < 5 || attributes.consistency < 5) {
-        archetypeTitle = `<strong>The Dreamer.</strong>`;
-        archetypeSubtitle = `Awaiting Action.`;
-        summaryHTML = `You have great potential, but your habits aren't supporting your dreams yet. Focus on small, daily consistencies to level up.`;
-    } else {
-        archetypeTitle = `<strong>The Apprentice.</strong>`;
-        archetypeSubtitle = `The Committed Learner.`;
-        summaryHTML = `You are on the path. You made some good choices and some learning mistakes. Keep refining your daily habits.`;
-    }
-    
+  // Archetype logic (polished)
+if (attributes.mindset > 15 && attributes.consistency > 10) {
+    archetypeTitle = `<strong>The Architect.</strong>`;
+    archetypeSubtitle = `Builder of Systems.`;
+    summaryHTML = `
+        Your strength is intentional structure. 
+        You don’t just have discipline—you design it.  
+        Your mindset and habits work together, forming a foundation 
+        that naturally pushes you toward long-term success.
+    `;
+} 
+else if (attributes.risk > 10 && attributes.trajectory > 10) {
+    archetypeTitle = `<strong>The Visionary.</strong>`;
+    archetypeSubtitle = `The Strategic Risk-Taker.`;
+    summaryHTML = `
+        You see possibility where others see uncertainty.  
+        You’re willing to take calculated risks when they align with a bigger vision.  
+        Stay grounded in patience—and your intuition will continue to guide you well.
+    `;
+} 
+else if (attributes.focus < 5 || attributes.consistency < 5) {
+    archetypeTitle = `<strong>The Dreamer.</strong>`;
+    archetypeSubtitle = `Potential in Motion.`;
+    summaryHTML = `
+        You think big, and the desire for growth is real—  
+        but your habits haven’t fully caught up yet.  
+        Start with small, repeatable actions.  
+        Your potential becomes unstoppable when paired with consistency.
+    `;
+} 
+else {
+    archetypeTitle = `<strong>The Apprentice.</strong>`;
+    archetypeSubtitle = `The Intentional Learner.`;
+    summaryHTML = `
+        You're actively growing, questioning, and adjusting.  
+        Your journey isn’t perfect—but it’s purposeful.  
+        Every choice you’ve made shows commitment.  
+        Keep refining your rhythm and your progress will compound.
+    `;
+}
     summaryEl.innerHTML = `${archetypeTitle}<br><span style="color: var(--teal); font-weight: 700;">${archetypeSubtitle}</span><br><br>${summaryHTML}`;
 
     // 3. Render Raw Score Values and determine weakest attribute
