@@ -1498,12 +1498,11 @@ function resetGame() {
     document.getElementById("progress-wrapper").style.display = "block";
     document.getElementById("orb").style.display = "block";
 
-    // Reset orb size & color
-    // Reset orb size & color
+    // Reset orb size & color 
 const orb = document.getElementById("orb");
 orb.style.width = "120px";
 orb.style.height = "120px";
-orb.classList.remove("stage-1", "stage-2", "stage-3");
+orb.classList.remove("stage-1", "stage-2", "stage-3", "stage-4");
 orb.classList.add("stage-0");
 
     // Reset UI text
